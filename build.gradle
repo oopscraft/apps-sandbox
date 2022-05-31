@@ -1,13 +1,40 @@
-plugins {
-    id 'java'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+allprojects {
+    group = 'org.oopscraft.apps'
+    version = '1.0.0-SNAPSHOT'
+    repositories {
+        maven {
+            allowInsecureProtocol = true
+            url project.mavenUrl
+            credentials {
+                username project.mavenUsername
+                password project.mavenPassword
+            }
+        }
+        mavenCentral()
     }
-}
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin('maven-publish')) {
+            project.publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        groupId = group
+                        artifactId = project.name
+                        version = version
+                        from components.java
+                    }
+                }
+                repositories {
+                    maven {
+                        allowInsecureProtocol = true
+                        url System.getProperty("mavenPublishUrl")
+                        credentials {
+                            username System.getProperty("mavenUsername")
+                            password System.getProperty("mavenPassword")
+                        }
+                    }
+                }
 
-dependencies {
-
+            }
+        }
+    }
 }
