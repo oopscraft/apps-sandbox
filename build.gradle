@@ -1,5 +1,5 @@
 allprojects {
-    group = 'org.oopscraft.apps'
+    group = 'org.oopscraft.apps-module'
     version = '1.0.0-SNAPSHOT'
     repositories {
         maven {
@@ -17,9 +17,6 @@ allprojects {
             project.publishing {
                 publications {
                     mavenJava(MavenPublication) {
-                        groupId = group
-                        artifactId = project.name
-                        version = version
                         from components.java
                     }
                 }
