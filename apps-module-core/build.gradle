@@ -12,7 +12,8 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.oopscraft.apps:apps-core:1.0.0-SNAPSHOT'
+    compileOnly 'org.oopscraft.apps:apps-core:1.0.0-SNAPSHOT'
+    testImplementation 'org.oopscraft.apps:apps-core:1.0.0-SNAPSHOT'
 }
 
 bootJar {
