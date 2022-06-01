@@ -1,5 +1,5 @@
 allprojects {
-    group = 'org.oopscraft.apps-module'
+    group = 'org.oopscraft.apps'
     version = '1.0.0-SNAPSHOT'
     repositories {
         maven {
