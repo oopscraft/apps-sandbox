@@ -12,8 +12,14 @@ configurations {
 }
 
 dependencies {
+
     implementation 'org.oopscraft.apps:apps-web:1.0.0-SNAPSHOT'
     implementation project(':apps-module-core')
+
+    // lombok
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 bootJar {
