@@ -12,7 +12,14 @@ configurations {
 }
 
 dependencies {
+
+    // apps core
     implementation 'org.oopscraft.apps:apps-core:1.0.0-SNAPSHOT'
+
+    // annotation processor
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
+
 }
 
 bootJar {
