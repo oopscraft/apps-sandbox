@@ -1,3 +1,8 @@
 rootProject.name = 'apps-module'
-include 'apps-module-core', 'apps-module-web', 'apps-module-batch'
+include 'apps-module-core'
+include 'apps-module-web'
+include 'apps-module-batch'
 
+if(System.getProperty("includeSubmodule") == "true") {
+    includeBuild("../")
+}

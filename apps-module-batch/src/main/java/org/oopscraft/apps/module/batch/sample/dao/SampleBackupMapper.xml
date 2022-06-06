@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.oopscraft.apps.module.batch.sample.dao.SampleBackupMapper">
+
+    <select id="selectSampleBackups" resultType="org.oopscraft.apps.module.batch.sample.dto.SampleBackupVo">
+        <![CDATA[
+        select  id,
+                name,
+                number,
+                long_number,
+                double_number,
+                big_decimal,
+                sql_date,
+                util_date,
+                timestamp,
+                local_date_time,
+                local_date,
+                data
+        from    sandbox_sample_backup
+        limit   #{limit}
+        ]]>
+    </select>
+
+    <select id="selectSampleBackup" resultType="org.oopscraft.apps.module.batch.sample.dto.SampleBackupVo">
+        <![CDATA[
+        /* com.sandbox.batch.sample.dao.SampleBackupMapper.selectSampleBackup */
+        select  id,
+                name,
+                number,
+                long_number,
+                double_number,
+                big_decimal,
+                sql_date,
+                util_date,
+                timestamp,
+                local_date_time,
+                local_date,
+                data
+        from    sandbox_sample_backup
+        where   id = #{id}
+        ]]>
+    </select>
+
+    <insert id="insertSampleBackup">
+        <![CDATA[
+        insert into sandbox_sample_backup (
+                id,
+                name,
+                number,
+                long_number,
+                double_number,
+                big_decimal,
+                sql_date,
+                util_date,
+                timestamp,
+                local_date_time,
+                local_date,
+                data
+        ) values (
+                #{id},
+                #{name},
+                #{number},
+                #{longNumber},
+                #{doubleNumber},
+                #{bigDecimal},
+                #{sqlDate},
+                #{utilDate},
+                #{timestamp},
+                #{localDateTime},
+                #{localDate},
+                #{data}
+        )
+        ]]>
+    </insert>
+
+    <delete id="deleteSampleBackupAll">
+        <![CDATA[
+        delete from sandbox_sample_backup
+        ]]>
+    </delete>
+
+    <select id="selectSampleBackupCount" resultType="int">
+        <![CDATA[
+        select  count(*)
+        from    sandbox_sample_backup
+        ]]>
+    </select>
+
+</mapper>

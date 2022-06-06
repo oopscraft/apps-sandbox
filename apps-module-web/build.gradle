@@ -1,32 +1,76 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '2.5.2'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'maven-publish'
+	id 'java'
+	id 'java-library'
+	id 'org.springframework.boot' version '2.5.2'
+	id 'maven-publish'
+	id 'idea'
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += ['src/main/java']
+			exclude "**/*.java"
+		}
+	}
+	test {
+		resources {
+			srcDirs += ['src/test/java']
+			exclude "**/*.java"
+		}
+	}
 }
 
 dependencies {
 
-    implementation 'org.oopscraft.apps:apps-web:1.0.0-SNAPSHOT'
-    implementation project(':apps-module-core')
+	// platform
+	implementation platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
+	annotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
+	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
 
-    // lombok
-    implementation 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+	// project
+	implementation 'org.oopscraft.apps:apps-web:1.0.0-SNAPSHOT'
+
+	// annotationProcessor
+	annotationProcessor 'javax.annotation:javax.annotation-api'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt'
+	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa'
+	annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
+
+	// unit test
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+	testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testCompileOnly 'org.junit.platform:junit-platform-runner'
+}
+
+test {
+	useJUnitPlatform()
 }
 
 bootJar {
-    enabled = false
+	enabled = false
 }
 
 jar {
-    enabled = true
-    classifier = ''
+	enabled = true
+	classifier = ''
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
 }

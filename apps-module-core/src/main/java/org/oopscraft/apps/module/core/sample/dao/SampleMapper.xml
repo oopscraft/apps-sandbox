@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.oopscraft.apps.module.core.sample.dao.SampleMapper">
+
+    <select id="selectSamples" resultType="org.oopscraft.apps.module.core.sample.dto.SampleVo">
+        <![CDATA[
+        select   id as "id"
+                ,name as "name"
+                ,number as "number"
+                ,long_number as "longNumber"
+                ,double_number as "doubleNumber"
+                ,big_decimal as "bigDecimal"
+                ,sql_date as "sqlDate"
+                ,util_date as "utilDate"
+                ,timestamp as "timestamp"
+                ,data as "data"
+        from    sandbox_sample
+        where   1 = 1
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id like concat(#{sample.id},'%')
+            ]]>
+        </if>
+        <if test="name != null">
+            <![CDATA[
+            and name like concat(#{sample.name},'%')
+            ]]>
+        </if>
+    </select>
+
+</mapper>
