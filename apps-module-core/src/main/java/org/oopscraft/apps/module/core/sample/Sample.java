@@ -1,14 +1,16 @@
 package org.oopscraft.apps.module.core.sample;
 
 import lombok.*;
+import org.modelmapper.ModelMapper;
+import org.oopscraft.apps.module.core.sample.dto.SampleEntity;
+import org.oopscraft.apps.module.core.sample.dto.SampleVo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sample {
@@ -40,5 +42,25 @@ public class Sample {
     private String backupId;
 
     private String backupName;
+
+    /**
+     * from
+     * @param sampleEntity sample entity
+     * @return sample
+     */
+    public static Sample from(SampleEntity sampleEntity) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(sampleEntity, Sample.class);
+    }
+
+    /**
+     * from
+     * @param sampleVo sample value object
+     * @return return sample
+     */
+    public static Sample from(SampleVo sampleVo) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(sampleVo, Sample.class);
+    }
 
 }

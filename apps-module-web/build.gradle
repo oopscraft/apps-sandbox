@@ -35,7 +35,8 @@ dependencies {
 	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
 
 	// project
-	implementation 'org.oopscraft.apps:apps-web:1.0.0-SNAPSHOT'
+	implementation "org.oopscraft.apps:apps-web:1.0.0-SNAPSHOT"
+	implementation project(":apps-module-core")
 
 	// annotationProcessor
 	annotationProcessor 'javax.annotation:javax.annotation-api'
