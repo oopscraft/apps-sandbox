@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SampleService {
 
+    public static enum DaoType { JPA, QUERY_DSL, MYBATIS }
+
     private final SampleRepository sampleRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -44,8 +46,8 @@ public class SampleService {
      * @param pageRequest
      * @return
      */
-    public List<Sample> getSamples(SampleSearch sampleSearch, PageRequest pageRequest) {
-        switch(sampleSearch.getDaoType()) {
+    public List<Sample> getSamples(SampleSearch sampleSearch, DaoType daoType, PageRequest pageRequest) {
+        switch(daoType) {
             case JPA:
                 return getSamplesWithJpa(sampleSearch, pageRequest);
             case QUERY_DSL:
@@ -53,7 +55,7 @@ public class SampleService {
             case MYBATIS:
                 return getSamplesWithMybatis(sampleSearch, pageRequest);
             default:
-                throw new RuntimeException(String.format("Invalid DaoType[%s]", sampleSearch.getDaoType()));
+                throw new RuntimeException(String.format("Invalid DaoType[%s]", daoType));
         }
     }
 

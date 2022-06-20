@@ -8,10 +8,6 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SampleSearch {
 
-    public static enum DaoType { JPA, QUERY_DSL, MYBATIS }
-
-    private DaoType daoType;
-
     private String id;
 
     private String name;

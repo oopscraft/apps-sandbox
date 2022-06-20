@@ -1,9 +1,14 @@
 package org.oopscraft.apps.module.web.api.v1.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SaveSampleRequest {
 
     @Schema(description = "ID" , example = "ABC")

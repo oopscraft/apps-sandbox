@@ -41,7 +41,7 @@ public class SampleRestController {
      * getSamples
      * @param id
      * @param name
-     * @param _daoType
+     * @param daoType
      * @param pageRequest
      * @param response
      * @return
@@ -50,22 +50,21 @@ public class SampleRestController {
     @Operation(summary = "Searches list of Sample", description = "Retrieves list of sample with pagination(via JPA,QueryDsl,Mybatis)")
     @Parameter(name = "id", description = "ID", schema = @Schema(type = "string", defaultValue = ""))
     @Parameter(name = "name", description = "Name", schema = @Schema(type = "string", defaultValue = ""))
-    @Parameter(name = "daoType", description = "DAO type", schema = @Schema(type = "string", allowableValues = {"JPA", "QUERY_DSL", "MYBATIS"}, defaultValue = "JPA"))
+    @Parameter(name = "_daoType", description = "DAO type", schema = @Schema(type = "string", allowableValues = {"JPA", "QUERY_DSL", "MYBATIS"}, defaultValue = "JPA"))
     @Parameter(name = "pageRequest", hidden = true)
     @PageableAsQueryParam
     public List<SampleResponse> getSamples(
             @RequestParam(name = "id", required = false) String id,
             @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "daoType", required = false) String daoType,
+            @RequestParam(name = "_daoType", required = false) String daoType,
             PageRequest pageRequest,
             HttpServletResponse response
     ) {
         SampleSearch sampleSearch = SampleSearch.builder()
-                .daoType(SampleSearch.DaoType.valueOf(daoType))
                 .id(id)
                 .name(name)
                 .build();
-        List<SampleResponse> sampleResponses = sampleService.getSamples(sampleSearch, pageRequest).stream()
+        List<SampleResponse> sampleResponses = sampleService.getSamples(sampleSearch, SampleService.DaoType.valueOf(daoType), pageRequest).stream()
                 .map(SampleResponse::from)
                 .collect(Collectors.toList());
         return sampleResponses;
