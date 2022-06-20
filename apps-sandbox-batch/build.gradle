@@ -35,8 +35,8 @@ dependencies {
 	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
 
 	// project
-	implementation "org.oopscraft.apps:apps-web:1.0.0-SNAPSHOT"
-	implementation project(":apps-module-core")
+	implementation "org.oopscraft.apps:apps-batch:1.0.0-SNAPSHOT"
+	implementation project(":apps-sandbox-core")
 
 	// annotationProcessor
 	annotationProcessor 'javax.annotation:javax.annotation-api'
@@ -60,7 +60,8 @@ test {
 }
 
 bootJar {
-	enabled = false
+	enabled = true
+	classifier = 'boot'
 }
 
 jar {
