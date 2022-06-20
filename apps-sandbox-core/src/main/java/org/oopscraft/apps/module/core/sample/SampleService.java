@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.core.data.PageRequest;
 import org.oopscraft.apps.core.data.PageRowBounds;
+import org.oopscraft.apps.module.core.sample.dao.SampleBackupRepository;
+import org.oopscraft.apps.module.core.sample.dao.SampleErrorRepository;
 import org.oopscraft.apps.module.core.sample.dao.SampleMapper;
 import org.oopscraft.apps.module.core.sample.dao.SampleRepository;
 import org.oopscraft.apps.module.core.sample.dto.*;
@@ -16,26 +18,41 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class SampleService {
 
     public static enum DaoType { JPA, QUERY_DSL, MYBATIS }
 
     private final SampleRepository sampleRepository;
 
+    private final SampleBackupRepository sampleBackupRepository;
+
+    private final SampleErrorRepository sampleErrorRepository;
+
     private final JPAQueryFactory jpaQueryFactory;
 
     private final SampleMapper sampleMapper;
+
+    private final PlatformTransactionManager transactionManager;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -171,7 +188,28 @@ public class SampleService {
      * saveSample
      * @param sample
      */
-    public void saveSample(@NotNull Sample sample) {
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void saveSample(@NotNull Sample sample, boolean forceException, boolean ignoreException) {
+        try {
+            // saves sample
+            saveSample(sample, false);
+
+            // saves sample backup
+            SampleBackup sampleBackup = modelMapper.map(sample, SampleBackup.class);
+            saveSampleBackup(sampleBackup, forceException);
+
+        }catch(Exception e){
+            if(ignoreException) {
+                SampleError sampleError = modelMapper.map(sample, SampleError.class);
+                saveSampleError(sampleError, false);
+            }else {
+                throw new RuntimeException("Force To Fail");
+            }
+        }
+    }
+
+    @Transactional
+    public void saveSample(@NotNull Sample sample, boolean forceException) {
         SampleEntity one = sampleRepository.findById(sample.getId()).orElse(null);
         if (one == null) {
             one = SampleEntity.builder()
@@ -179,7 +217,49 @@ public class SampleService {
                     .build();
         }
         modelMapper.map(sample, one);
+        if(forceException) {
+            one.setId(null);
+        }
         sampleRepository.saveAndFlush(one);
+    }
+
+
+    /**
+     * saveSampleBackup
+     * @param sampleBackup
+     */
+    @Transactional
+    public void saveSampleBackup(@NotNull SampleBackup sampleBackup, boolean forceException) {
+        SampleBackupEntity one = sampleBackupRepository.findById(sampleBackup.getId()).orElse(null);
+        if(one == null) {
+            one = SampleBackupEntity.builder()
+                    .id(sampleBackup.getId())
+                    .build();
+        }
+        modelMapper.map(sampleBackup, one);
+        if(forceException){
+            one.setId(null);
+        }
+        sampleBackupRepository.saveAndFlush(one);
+    }
+
+    /**
+     * saveSampleError
+     * @param sampleError
+     */
+    @Transactional
+    public void saveSampleError(@NotNull SampleError sampleError, boolean forceException) {
+        SampleErrorEntity one = sampleErrorRepository.findById(sampleError.getId()).orElse(null);
+        if(one == null) {
+            one = SampleErrorEntity.builder()
+                    .id(sampleError.getId())
+                    .build();
+        }
+        modelMapper.map(sampleError, one);
+        if(forceException) {
+            one.setId(null);
+        }
+        sampleErrorRepository.saveAndFlush(one);
     }
 
     /**
@@ -187,6 +267,7 @@ public class SampleService {
      *
      * @param id
      */
+    @Transactional
     public void deleteSample(@NotNull String id) {
         sampleRepository.deleteById(id);
         sampleRepository.flush();

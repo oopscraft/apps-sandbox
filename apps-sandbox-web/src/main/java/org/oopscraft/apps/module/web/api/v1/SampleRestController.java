@@ -17,6 +17,7 @@ import org.oopscraft.apps.module.web.api.v1.dto.SaveSampleRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +28,10 @@ import java.util.stream.Collectors;
  */
 
 @RestController
-@RequestMapping("api/v1/module/sample")
+@RequestMapping("api/v1/sandbox/sample")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "/module/sample", description = "Sample")
+@Tag(name = "/sandbox/sample", description = "Sandbox Sample")
 public class SampleRestController {
 
     private final SampleService sampleService;
@@ -78,7 +79,6 @@ public class SampleRestController {
     @GetMapping("{id}")
     @Operation(summary = "Gets Sample", description = "Returns sample data specified ID")
     @Parameter(name = "id", description = "ID", schema = @Schema(type = "string", defaultValue = ""))
-    @Parameter(name = "_forceToFail", description = "force to fail")
     public SampleResponse getSample(@PathVariable("id") String id) {
         Sample sample = sampleService.getSample(id);
         if(sample != null){
@@ -89,16 +89,18 @@ public class SampleRestController {
 
     /**
      * saveSample
-     * @param sampleDto
+     * @param saveSampleRequest
      */
     @PostMapping
     @Operation(summary = "Saves Sample", description = "Saves Sample data into database")
+    @Transactional
     public void saveSample(
             @RequestBody SaveSampleRequest saveSampleRequest,
-            @RequestParam(value = "_forceToFail", required = false, defaultValue = "true")Boolean forceToFail
+            @RequestParam(value = "_forceException", required = false, defaultValue = "false")Boolean forceException,
+            @RequestParam(value = "_ignoreException", required = false, defaultValue = "false")Boolean ignoreException
     ) {
         Sample sample = modelMapper.map(saveSampleRequest, Sample.class);
-        sampleService.saveSample(sample);
+        sampleService.saveSample(sample, forceException, ignoreException);
     }
 
     /**
