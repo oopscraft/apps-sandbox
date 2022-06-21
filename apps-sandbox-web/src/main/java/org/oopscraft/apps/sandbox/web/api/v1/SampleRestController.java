@@ -1,4 +1,4 @@
-package org.oopscraft.apps.module.web.api.v1;
+package org.oopscraft.apps.sandbox.web.api.v1;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,8 +12,8 @@ import org.oopscraft.apps.core.data.PageableAsQueryParam;
 import org.oopscraft.apps.module.core.sample.Sample;
 import org.oopscraft.apps.module.core.sample.SampleSearch;
 import org.oopscraft.apps.module.core.sample.SampleService;
-import org.oopscraft.apps.module.web.api.v1.dto.SampleResponse;
-import org.oopscraft.apps.module.web.api.v1.dto.SaveSampleRequest;
+import org.oopscraft.apps.sandbox.web.api.v1.dto.SampleResponse;
+import org.oopscraft.apps.sandbox.web.api.v1.dto.SaveSampleRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
