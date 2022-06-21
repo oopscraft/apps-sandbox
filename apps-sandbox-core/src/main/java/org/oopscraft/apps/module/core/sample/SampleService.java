@@ -19,19 +19,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -208,6 +201,11 @@ public class SampleService {
         }
     }
 
+    /**
+     * save sample
+     * @param sample
+     * @param forceException
+     */
     @Transactional
     public void saveSample(@NotNull Sample sample, boolean forceException) {
         SampleEntity one = sampleRepository.findById(sample.getId()).orElse(null);
@@ -225,7 +223,7 @@ public class SampleService {
 
 
     /**
-     * saveSampleBackup
+     * saves sample backup
      * @param sampleBackup
      */
     @Transactional
