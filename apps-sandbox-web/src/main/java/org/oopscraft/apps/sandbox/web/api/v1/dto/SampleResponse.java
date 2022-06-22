@@ -3,7 +3,7 @@ package org.oopscraft.apps.sandbox.web.api.v1.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.modelmapper.ModelMapper;
-import org.oopscraft.apps.module.core.sample.Sample;
+import org.oopscraft.apps.sandbox.core.sample.Sample;
 
 import java.math.BigDecimal;
 
