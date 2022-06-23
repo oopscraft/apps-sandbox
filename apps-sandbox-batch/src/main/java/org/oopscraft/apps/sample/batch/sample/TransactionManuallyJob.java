@@ -34,14 +34,17 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionAttribute;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -54,6 +57,8 @@ public class TransactionManuallyJob extends AbstractJob {
     public enum ReaderType { MYBATIS, QUERY_DSL, QUERY_DSL_PROJECTION }
 
     public enum WriterType { MYBATIS, JPA }
+
+    private long count = 0;
 
     /**
      * initialize
@@ -84,17 +89,10 @@ public class TransactionManuallyJob extends AbstractJob {
      * @return
      */
     public Step step(int limit) {
-
-        // defines transaction attribute
-        DefaultTransactionAttribute transactionAttribute = new DefaultTransactionAttribute();
-        transactionAttribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
-
-        // builds step
         return stepBuilderFactory.get("step")
                 .<SampleEntity, SampleEntity>chunk(1)
                 .reader(itemReader(limit))
                 .writer(itemWriter())
-                .transactionAttribute(transactionAttribute)
                 .build();
     }
 
@@ -121,30 +119,33 @@ public class TransactionManuallyJob extends AbstractJob {
      */
     public ItemWriter<SampleEntity> itemWriter() {
         return sampleEntities -> {
-            int index = 0;
-            for(SampleEntity sampleEntity : sampleEntities) {
-                index ++;
-                log.debug("sampleEntity: {}", sampleEntity);
-                SampleBackup sampleBackup = SampleBackup.builder()
-                        .id(sampleEntity.getId())
-                        .build();
-                modelMapper.map(sampleEntity, sampleBackup);
+           for(SampleEntity sampleEntity : sampleEntities) {
+               count ++;
+               log.debug("sampleEntity: {}", sampleEntity);
+               SampleBackup sampleBackup = SampleBackup.builder()
+                       .id(sampleEntity.getId())
+                       .build();
+               modelMapper.map(sampleEntity, sampleBackup);
 
-                // force to error
-                boolean forceToException = false;
-                if(index%2 == 0) {
-                    forceToException = true;
-                }
-
-                // manually transaction
-                try {
-                    sampleService.saveSampleBackup(sampleBackup, forceToException);
-                }catch(Exception ignore){
-                    log.warn(ignore.getMessage());
-                    SampleError sampleError = modelMapper.map(sampleEntity, SampleError.class);
-                    sampleService.saveSampleError(sampleError, false);
-                }
-            }
+               // manually transaction
+               TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+               transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
+               transactionTemplate.executeWithoutResult(transactionStatus -> {
+                   try {
+                       // force to error
+                       boolean forceToException = false;
+                       if(count%2 == 0) {
+                           forceToException = true;
+                       }
+                       sampleService.saveSampleBackup(sampleBackup, forceToException);
+                   }catch(Exception ignore){
+                       log.warn(ignore.getMessage());
+                       SampleError sampleError = modelMapper.map(sampleEntity, SampleError.class);
+                       sampleService.saveSampleError(sampleError, false);
+                       transactionStatus.setRollbackOnly();
+                   }
+               });
+           }
         };
     }
 
@@ -158,9 +159,11 @@ public class TransactionManuallyJob extends AbstractJob {
             long sampleTotalCount = sampleService.getSampleTotalCount();
             long sampleBackupTotalCount = sampleService.getSampleBackupTotalCount();
             long sampleErrorTotalCount = sampleService.getSampleErrorTotalCount();
+            log.info("================================================");
             log.info("== sampleTotalCount:{}", sampleTotalCount);
             log.info("== sampleBackupTotalCount:{}", sampleBackupTotalCount);
             log.info("== sampleErrorTotalCount:{}", sampleErrorTotalCount);
+            log.info("================================================");
 
             // checks count
             if(sampleTotalCount != (sampleBackupTotalCount + sampleErrorTotalCount)){
