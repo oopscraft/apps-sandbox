@@ -142,7 +142,6 @@ public class TransactionManuallyJob extends AbstractJob {
                        log.warn(ignore.getMessage());
                        SampleError sampleError = modelMapper.map(sampleEntity, SampleError.class);
                        sampleService.saveSampleError(sampleError, false);
-                       transactionStatus.setRollbackOnly();
                    }
                });
            }
