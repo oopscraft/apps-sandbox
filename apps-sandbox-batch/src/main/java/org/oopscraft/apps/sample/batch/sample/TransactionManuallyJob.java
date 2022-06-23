@@ -89,10 +89,13 @@ public class TransactionManuallyJob extends AbstractJob {
      * @return
      */
     public Step step(int limit) {
+        DefaultTransactionAttribute transactionAttribute = new DefaultTransactionAttribute();
+        transactionAttribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
         return stepBuilderFactory.get("step")
                 .<SampleEntity, SampleEntity>chunk(1)
                 .reader(itemReader(limit))
                 .writer(itemWriter())
+                .transactionAttribute(transactionAttribute)
                 .build();
     }
 
@@ -129,7 +132,7 @@ public class TransactionManuallyJob extends AbstractJob {
 
                // manually transaction
                TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-               transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
+               //transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
                transactionTemplate.executeWithoutResult(transactionStatus -> {
                    try {
                        // force to error
@@ -142,6 +145,7 @@ public class TransactionManuallyJob extends AbstractJob {
                        log.warn(ignore.getMessage());
                        SampleError sampleError = modelMapper.map(sampleEntity, SampleError.class);
                        sampleService.saveSampleError(sampleError, false);
+                       transactionStatus.setRollbackOnly();
                    }
                });
            }
