@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.batch.context.BatchContext;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.batch.tasklet.AbstractTasklet;
+import org.oopscraft.apps.core.data.TransactionTemplateUtils;
 import org.oopscraft.apps.sample.batch.sample.dao.SampleBackupMapper;
 import org.oopscraft.apps.sample.batch.sample.dao.SampleMapper;
 import org.oopscraft.apps.sample.batch.sample.dto.SampleBackupVo;
@@ -37,7 +38,9 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.interceptor.TransactionAttribute;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
@@ -89,13 +92,10 @@ public class TransactionManuallyJob extends AbstractJob {
      * @return
      */
     public Step step(int limit) {
-        DefaultTransactionAttribute transactionAttribute = new DefaultTransactionAttribute();
-        transactionAttribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
         return stepBuilderFactory.get("step")
                 .<SampleEntity, SampleEntity>chunk(1)
                 .reader(itemReader(limit))
                 .writer(itemWriter())
-                .transactionAttribute(transactionAttribute)
                 .build();
     }
 
@@ -122,31 +122,37 @@ public class TransactionManuallyJob extends AbstractJob {
      */
     public ItemWriter<SampleEntity> itemWriter() {
         return sampleEntities -> {
-           for(SampleEntity sampleEntity : sampleEntities) {
-               count ++;
-               log.debug("sampleEntity: {}", sampleEntity);
-               SampleBackup sampleBackup = SampleBackup.builder()
-                       .id(sampleEntity.getId())
-                       .build();
-               modelMapper.map(sampleEntity, sampleBackup);
+            for(SampleEntity sampleEntity : sampleEntities) {
 
-               // manually transaction
-               TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-               //transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
-               transactionTemplate.executeWithoutResult(transactionStatus -> {
-                   try {
-                       // force to error
-                       boolean forceToException = false;
-                       if(count%2 == 0) {
+                // new transaction
+                TransactionTemplateUtils.executeWithoutResult(transactionManager, Propagation.REQUIRES_NEW, transactionStatus -> {
+                    try {
+                        count ++;
+                        log.debug("sampleEntity: {}", sampleEntity);
+                        SampleBackup sampleBackup = SampleBackup.builder()
+                                .id(sampleEntity.getId())
+                               .build();
+                        modelMapper.map(sampleEntity, sampleBackup);
+
+                        // force to error
+                        boolean forceToException = false;
+                        if(count%2 == 0) {
                            forceToException = true;
-                       }
-                       sampleService.saveSampleBackup(sampleBackup, forceToException);
-                   }catch(Exception ignore){
-                       log.warn(ignore.getMessage());
-                       SampleError sampleError = modelMapper.map(sampleEntity, SampleError.class);
-                       sampleService.saveSampleError(sampleError, false);
-                       transactionStatus.setRollbackOnly();
-                   }
+                        }
+                        sampleService.saveSampleBackup(sampleBackup, forceToException);
+
+                    }catch(Exception ignore){
+                        log.warn(ignore.getMessage());
+
+                        // checks rollback-only manually (jpa transaction manager not support nested transaction)
+                        transactionStatus.setRollbackOnly();
+
+                        // writes error with new transaction
+                        TransactionTemplateUtils.executeWithoutResult(transactionManager, Propagation.REQUIRES_NEW, transactionStatus1->{
+                            SampleError sampleError = modelMapper.map(sampleEntity, SampleError.class);
+                            sampleService.saveSampleError(sampleError, false);
+                        });
+                    }
                });
            }
         };
