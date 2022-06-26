@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.core.data.PageRequest;
 import org.oopscraft.apps.core.data.PageRowBounds;
+import org.oopscraft.apps.core.data.TransactionTemplateUtils;
 import org.oopscraft.apps.sandbox.core.sample.dao.SampleBackupRepository;
 import org.oopscraft.apps.sandbox.core.sample.dao.SampleErrorRepository;
 import org.oopscraft.apps.sandbox.core.sample.dao.SampleMapper;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class SampleService {
 
     private final SampleMapper sampleMapper;
 
-    private final PlatformTransactionManager transactionManager;
+    private final TransactionTemplateUtils transactionTemplateUtils;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -181,7 +183,7 @@ public class SampleService {
      * saveSample
      * @param sample
      */
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    @Transactional
     public void saveSample(@NotNull Sample sample, boolean forceException, boolean ignoreException) {
         try {
             // saves sample
@@ -193,9 +195,12 @@ public class SampleService {
 
         }catch(Exception e){
             if(ignoreException) {
-                SampleError sampleError = modelMapper.map(sample, SampleError.class);
-                saveSampleError(sampleError, false);
-            }else {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                transactionTemplateUtils.executeWithoutResult(Propagation.REQUIRES_NEW, transactionStatus -> {
+                    SampleError sampleError = modelMapper.map(sample, SampleError.class);
+                    saveSampleError(sampleError, false);
+                });
+           }else {
                 throw new RuntimeException("Force To Fail");
             }
         }
