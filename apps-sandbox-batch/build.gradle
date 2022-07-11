@@ -38,10 +38,13 @@ dependencies {
 	implementation "org.oopscraft.apps:apps-batch:1.0.0-SNAPSHOT"
 	implementation project(":apps-sandbox-core")
 
-	// annotationProcessor
-	annotationProcessor 'javax.annotation:javax.annotation-api'
-	compileOnly 'org.projectlombok:lombok'
+	// annotation processor
+	compileOnly "org.projectlombok:lombok"
 	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'javax.annotation:javax.annotation-api'
+	annotationProcessor "javax.annotation:javax.annotation-api"
+	compileOnly "jakarta.persistence:jakarta.persistence-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt'
 	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa'
 	annotationProcessor 'org.hibernate:hibernate-jpamodelgen'

@@ -12,7 +12,7 @@ import com.querydsl.core.types.Path;
 /**
  * QSampleEntity is a Querydsl query type for SampleEntity
  */
-@Generated("com.querydsl.codegen.EntitySerializer")
+@Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QSampleEntity extends EntityPathBase<SampleEntity> {
 
     private static final long serialVersionUID = -1260880487L;

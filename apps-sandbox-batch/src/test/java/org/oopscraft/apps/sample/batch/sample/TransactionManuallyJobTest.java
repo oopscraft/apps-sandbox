@@ -13,10 +13,11 @@ public class TransactionManuallyJobTest extends AbstractJobTest {
      */
     @Test
     public void testDefault() {
-        BatchContext batchContext = new BatchContext();
-        batchContext.setJobClass(TransactionManuallyJob.class);
-        batchContext.setBaseDate("20210101");
-        batchContext.setJobParameter("limit", "1234");
+        BatchContext batchContext = BatchContext.builder()
+                .jobClass(TransactionManuallyJob.class)
+                .baseDate("20210101")
+                .jobParameter("limit", "1234")
+                .build();
         launchJob(batchContext);
     }
 

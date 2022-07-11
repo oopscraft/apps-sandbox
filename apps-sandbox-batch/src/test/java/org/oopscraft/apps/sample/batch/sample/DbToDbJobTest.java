@@ -13,13 +13,15 @@ public class DbToDbJobTest extends AbstractJobTest {
      */
     @Test
     public void testMybatisToMybatis() {
-        BatchContext batchContext = new BatchContext();
-        batchContext.setJobClass(DbToDbJob.class);
-        batchContext.setBaseDate("20210101");
-        batchContext.setJobParameter("readerType", DbToDbJob.ReaderType.MYBATIS.name());
-        batchContext.setJobParameter("writerType", DbToDbJob.WriterType.MYBATIS.name());
-        batchContext.setJobParameter("limit", "123");
+        BatchContext batchContext = BatchContext.builder()
+                .jobClass(DbToDbJob.class)
+                .baseDate("20210101")
+                .jobParameter("readerType", DbToDbJob.ReaderType.MYBATIS.name())
+                .jobParameter("writerType", DbToDbJob.ReaderType.MYBATIS.name())
+                .jobParameter("limit", "123")
+                .build();
         launchJob(batchContext);
+
     }
 
     /**
