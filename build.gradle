@@ -1,21 +1,46 @@
+ext {
+    includeSubmodule = System.getProperty("includeSubmodule")?System.getProperty("includeSubmodule").toBoolean():false
+    jdkVersion = System.getProperty("jdkVersion")?:"1.8"
+    mavenPublishUrl = System.getProperty("mavenPublishUrl")
+    mavenUsername = System.getProperty("mavenUsername")
+    mavenPassword = System.getProperty("mavenPassword")
+}
+print("==ext: ${ext.getProperties()}")
+
 allprojects {
-    group = 'org.oopscraft.apps'
-    version = '1.0.0-SNAPSHOT'
     afterEvaluate { project ->
-        if (project.plugins.hasPlugin('maven-publish')) {
+        group = "org.oopscraft.apps"
+        version = "1.0.0-SNAPSHOT"
+        if(project.plugins.hasPlugin("java")){
+            project.sourceCompatibility = jdkVersion
+            project.targetCompatibility = jdkVersion
+            compileJava.options.encoding = "UTF-8"
+            tasks.withType(JavaCompile){
+                options.encoding = 'UTF-8'
+            }
+            sourceSets.main.resources {
+                srcDirs += ["src/main/java"]
+                exclude "**/*.java"
+            }
+            sourceSets.test.resources {
+                srcDirs += ["src/main/java"]
+                exclude "**/*.java"
+            }
+        }
+        if(project.plugins.hasPlugin('maven-publish')) {
             project.publishing {
                 repositories {
                     maven {
                         allowInsecureProtocol = true
-                        url System.getProperty("mavenPublishUrl")
+                        url mavenPublishUrl
                         credentials {
-                            username System.getProperty("mavenUsername")
-                            password System.getProperty("mavenPassword")
+                            username mavenUsername
+                            password mavenPassword
                         }
                     }
                 }
-
             }
         }
     }
 }
+

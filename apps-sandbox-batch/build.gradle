@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
 	id 'java-library'
-	id 'org.springframework.boot' version '2.5.2'
+	id 'org.springframework.boot' version '2.6.8'
 	id 'maven-publish'
 	id 'idea'
 }
@@ -9,21 +9,6 @@ plugins {
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
-	}
-}
-
-sourceSets {
-	main {
-		resources {
-			srcDirs += ['src/main/java']
-			exclude "**/*.java"
-		}
-	}
-	test {
-		resources {
-			srcDirs += ['src/test/java']
-			exclude "**/*.java"
-		}
 	}
 }
 
@@ -63,8 +48,7 @@ test {
 }
 
 bootJar {
-	enabled = true
-	classifier = 'boot'
+	enabled = false
 }
 
 jar {
