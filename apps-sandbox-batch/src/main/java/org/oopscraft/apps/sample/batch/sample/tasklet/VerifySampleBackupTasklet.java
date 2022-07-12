@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cursor.Cursor;
 import org.oopscraft.apps.batch.context.BatchContext;
-import org.oopscraft.apps.batch.tasklet.AbstractTasklet;
+import org.oopscraft.apps.batch.job.AbstractTasklet;
 import org.oopscraft.apps.sample.batch.sample.dao.SampleBackupMapper;
 import org.oopscraft.apps.sample.batch.sample.dao.SampleMapper;
 import org.oopscraft.apps.sample.batch.sample.dto.SampleBackupVo;
