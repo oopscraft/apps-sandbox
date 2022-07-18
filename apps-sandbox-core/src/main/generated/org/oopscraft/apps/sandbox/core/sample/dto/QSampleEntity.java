@@ -23,11 +23,13 @@ public class QSampleEntity extends EntityPathBase<SampleEntity> {
 
     public final NumberPath<java.math.BigDecimal> bigDecimal = createNumber("bigDecimal", java.math.BigDecimal.class);
 
-    public final StringPath data = createString("data");
+    public final StringPath cryptoText = createString("cryptoText");
 
     public final NumberPath<Double> doubleNumber = createNumber("doubleNumber", Double.class);
 
     public final StringPath id = createString("id");
+
+    public final StringPath lobText = createString("lobText");
 
     public final DatePath<java.time.LocalDate> localDate = createDate("localDate", java.time.LocalDate.class);
 

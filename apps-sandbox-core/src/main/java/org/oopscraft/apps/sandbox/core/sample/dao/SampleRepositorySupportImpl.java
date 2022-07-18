@@ -42,7 +42,7 @@ public class SampleRepositorySupportImpl extends QuerydslRepositorySupport imple
                         qSampleEntity.sqlDate,
                         qSampleEntity.utilDate,
                         qSampleEntity.timestamp,
-                        qSampleEntity.data,
+                        qSampleEntity.lobText,
                         qSampleBackupEntity.id.as("backupId"),
                         qSampleBackupEntity.name.as("backupName")
                 )).from(qSampleEntity)

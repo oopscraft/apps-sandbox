@@ -52,16 +52,20 @@ public class SampleErrorEntity extends BaseEntity {
     @Column(name = "timestamp")
     private java.sql.Timestamp timestamp;
 
-    @Column(name = "local_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime localDateTime;
-
     @Column(name = "local_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;
 
-    @Column(name = "data")
+    @Column(name = "local_date_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime localDateTime;
+
+    @Column(name = "lob_text")
     @Lob
-    private String data;
+    private String lobText;
+
+    @Column(name = "crypto_text")
+    @Lob
+    private String cryptoText;
 
 }

@@ -1,16 +1,17 @@
-package org.oopscraft.apps.sandbox.core.sample.dto;
+package org.oopscraft.apps.sandbox.batch.sample.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.oopscraft.apps.batch.item.file.annotation.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SampleVo {
 
     private String id;
@@ -31,10 +32,12 @@ public class SampleVo {
 
     private java.sql.Timestamp timestamp;
 
-    private LocalDateTime localDateTime;
-
     private LocalDate localDate;
 
+    private LocalDateTime localDateTime;
+
     private String lobText;
+
+    private String cryptoText;
 
 }
