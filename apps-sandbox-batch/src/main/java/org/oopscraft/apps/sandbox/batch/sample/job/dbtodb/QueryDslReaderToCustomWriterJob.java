@@ -14,11 +14,15 @@ import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.VerifySampleBackupTasklet;
 import org.oopscraft.apps.sandbox.core.sample.dao.SampleBackupRepository;
 import org.oopscraft.apps.sandbox.core.sample.dto.QSampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.dto.SampleBackupEntity;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.item.ItemWriter;
 
 import java.util.Optional;
 
+/**
+ * DB to DB (QueryDSL Reader to Custom Writer)
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class QueryDslReaderToCustomWriterJob extends AbstractJob {
@@ -40,7 +44,7 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
         // 1. 테스트 데이터 생성
         addTasklet(new CreateSampleTasklet(size));
 
-        // 2. 데이터 처리 (Mybatis reader -> Jpa writer)
+        // 2. 데이터 처리 (Query DSL reader -> custom writer)
         addStep(copySampleStep());
 
         // 3. 결과 검증
@@ -60,7 +64,7 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
     }
 
     /**
-     * Query DSL reader
+     * query DSL reader
      * @return
      */
     public QueryDslDbItemReader<SampleVo> queryDslReader() {
@@ -88,15 +92,21 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
     }
 
     /**
-     * Jpa writer
+     * custom writer
      * @return
      */
     public ItemWriter<SampleVo> customWriter() {
         return items -> {
-
-
-
-            sampleBackupRepository.saveAllAndFlush(items);
+            for(SampleVo item : items) {
+                SampleBackupEntity one = sampleBackupRepository.findById(item.getId()).orElse(null);
+                if(one == null){
+                    one = SampleBackupEntity.builder()
+                            .id(item.getId())
+                            .build();
+                }
+                modelMapper.map(item, one);
+                sampleBackupRepository.saveAndFlush(one);
+            }
         };
     }
 
