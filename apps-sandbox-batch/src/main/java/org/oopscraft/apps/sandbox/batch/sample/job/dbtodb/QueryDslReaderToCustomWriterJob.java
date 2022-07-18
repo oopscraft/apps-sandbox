@@ -42,13 +42,13 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
         // 1. 테스트 데이터 생성
-        addTasklet(new CreateSampleTasklet(size));
+        addStep(new CreateSampleTasklet(size));
 
         // 2. 데이터 처리 (Query DSL reader -> custom writer)
         addStep(copySampleStep());
 
         // 3. 결과 검증
-        addTasklet(new VerifySampleBackupTasklet());
+        addStep(new VerifySampleBackupTasklet());
     }
 
     /**
@@ -106,6 +106,8 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
                 }
                 modelMapper.map(item, one);
                 sampleBackupRepository.saveAndFlush(one);
+
+                // copy child items
             }
         };
     }

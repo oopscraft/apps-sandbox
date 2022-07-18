@@ -32,13 +32,13 @@ public class MybatisReaderToJpaWriterJob extends AbstractJob {
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
         // 1. 테스트 데이터 생성
-        addTasklet(new CreateSampleTasklet(size));
+        addStep(new CreateSampleTasklet(size));
 
         // 2. 데이터 처리 (Mybatis reader -> Jpa writer)
         addStep(copySampleStep());
 
         // 3. 결과 검증
-        addTasklet(new VerifySampleBackupTasklet());
+        addStep(new VerifySampleBackupTasklet());
     }
 
     /**
