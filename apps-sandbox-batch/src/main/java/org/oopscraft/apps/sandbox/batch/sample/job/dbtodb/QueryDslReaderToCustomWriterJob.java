@@ -64,8 +64,6 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
      * @return
      */
     public QueryDslDbItemReader<SampleVo> queryDslReader() {
-
-        // Query
         QSampleEntity qSampleEntity = QSampleEntity.sampleEntity;
         JPAQuery<SampleVo> query = new JPAQuery<>();
         query.select(Projections.fields(SampleVo.class,
@@ -84,8 +82,6 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
                         qSampleEntity.cryptoText
                 )).from(qSampleEntity)
                 .limit(size);
-
-        // creates query dsl reader
         return createQueryDslDbItemReader(SampleVo.class)
                 .query(query)
                 .build();
@@ -98,6 +94,9 @@ public class QueryDslReaderToCustomWriterJob extends AbstractJob {
     public ItemWriter<SampleVo> customWriter() {
         return items -> {
 
+
+
+            sampleBackupRepository.saveAllAndFlush(items);
         };
     }
 
