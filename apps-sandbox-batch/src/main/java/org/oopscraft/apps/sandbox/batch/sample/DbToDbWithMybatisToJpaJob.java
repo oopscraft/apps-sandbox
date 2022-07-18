@@ -1,4 +1,4 @@
-package org.oopscraft.apps.sandbox.batch.sample.job.dbtodb;
+package org.oopscraft.apps.sandbox.batch.sample;
 
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ import org.springframework.batch.item.ItemProcessor;
 import java.util.Optional;
 
 @Slf4j
-public class MybatisReaderToJpaWriterJob extends AbstractJob {
+public class DbToDbWithMybatisToJpaJob extends AbstractJob {
 
     private long size;
 

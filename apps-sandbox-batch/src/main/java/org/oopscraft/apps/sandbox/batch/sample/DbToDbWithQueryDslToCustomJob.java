@@ -1,8 +1,7 @@
-package org.oopscraft.apps.sandbox.batch.sample.job.dbtodb;
+package org.oopscraft.apps.sandbox.batch.sample;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,7 +24,7 @@ import java.util.Optional;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class QueryDslReaderToCustomWriterJob extends AbstractJob {
+public class DbToDbWithQueryDslToCustomJob extends AbstractJob {
 
     private long size;
 

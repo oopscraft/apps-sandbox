@@ -1,4 +1,4 @@
-package org.oopscraft.apps.sandbox.batch.sample.job.dbtodb;
+package org.oopscraft.apps.sandbox.batch.sample;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -6,16 +6,17 @@ import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.test.AbstractJobTestSupport;
 
 @Slf4j
-public class QueryDslReaderToCustomWriterJobTest extends AbstractJobTestSupport {
+public class DbToDbWithMybatisToJpaJobTest extends AbstractJobTestSupport {
 
     @Test
     public void testDefault() {
         BatchContext batchContext = BatchContext.builder()
-                .jobClass(QueryDslReaderToCustomWriterJob.class)
+                .jobClass(DbToDbWithMybatisToJpaJob.class)
                 .baseDate(getCurrentBaseDate())
                 .jobParameter("size", "123")
                 .build();
         launchJob(batchContext);
+
     }
 
 }
