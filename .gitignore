@@ -25,11 +25,13 @@ hs_err_pid*
 .gradle
 
 # Ignore Gradle build output directory
-<<<<<<< HEAD
 build
 
 # idea
 **/.idea/
-**/build//
+**/build/
 **/out/
 
+# ignore generated resource
+**/src/main/generated
+**/src/test/generated_tests
