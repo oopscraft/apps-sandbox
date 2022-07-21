@@ -11,7 +11,7 @@ public class DbToDbWithQueryDslToCustomJobTest extends AbstractJobTestSupport {
     @Test
     public void testDefault() {
         BatchContext batchContext = BatchContext.builder()
-                .jobClass(DbToDbWithQueryDslToCustomJob.class)
+                .jobClass(DbQueryDslToDbCustomJob.class)
                 .baseDate(getCurrentBaseDate())
                 .jobParameter("size", "123")
                 .build();

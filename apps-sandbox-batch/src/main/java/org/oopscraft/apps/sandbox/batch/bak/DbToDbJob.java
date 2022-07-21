@@ -67,7 +67,7 @@ public class DbToDbJob {
 //        }
 //
 //        // 3. 결과 검증
-//        addTasklet(VerifySampleBackupTasklet.builder()
+//        addTasklet(CompareSampleToBackupTasklet.builder()
 //                .build());
 //
 //    }

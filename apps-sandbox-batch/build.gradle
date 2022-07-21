@@ -15,12 +15,14 @@ configurations {
 dependencies {
 
 	// platform
-	implementation platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
-	annotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
-	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
+	implementation platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	compileOnly platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	annotationProcessor platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	testCompileOnly platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	implementation "org.oopscraft.apps:apps-batch:${platformVersion}"
 
 	// project
-	implementation "org.oopscraft.apps:apps-batch:1.0.0-SNAPSHOT"
 	implementation project(":apps-sandbox-core")
 
 	// annotation processor

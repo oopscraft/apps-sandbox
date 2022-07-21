@@ -1,15 +1,13 @@
 package org.oopscraft.apps.sandbox.batch.sample.tasklet;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.job.AbstractTasklet;
-import org.oopscraft.apps.sandbox.core.sample.dao.SampleBackupRepository;
-import org.oopscraft.apps.sandbox.core.sample.dao.SampleRepository;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleRepository;
 import org.oopscraft.apps.sandbox.core.sample.dto.QSampleBackupEntity;
 import org.oopscraft.apps.sandbox.core.sample.dto.QSampleEntity;
-import org.oopscraft.apps.sandbox.core.sample.dto.SampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleEntity;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 

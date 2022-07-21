@@ -11,7 +11,7 @@ import org.oopscraft.apps.sandbox.core.sample.SampleBackup;
 import org.oopscraft.apps.sandbox.core.sample.SampleError;
 import org.oopscraft.apps.sandbox.core.sample.SampleService;
 import org.oopscraft.apps.sandbox.core.sample.dto.QSampleEntity;
-import org.oopscraft.apps.sandbox.core.sample.dto.SampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleEntity;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;

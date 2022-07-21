@@ -15,12 +15,12 @@ configurations {
 dependencies {
 
 	// platform
-	implementation platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
-	annotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
-	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:1.0.0-SNAPSHOT")
-
-	// project
-	implementation 'org.oopscraft.apps:apps-core:1.0.0-SNAPSHOT'
+	implementation platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	compileOnly platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	annotationProcessor platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	testCompileOnly platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	testAnnotationProcessor platform("org.oopscraft.apps:apps-dependencies:${platformVersion}")
+	implementation "org.oopscraft.apps:apps-core:${platformVersion}"
 
 	// annotation processor
 	compileOnly "org.projectlombok:lombok"
@@ -33,7 +33,7 @@ dependencies {
 	annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa'
 	annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
 
-	// unit test
+	// test
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

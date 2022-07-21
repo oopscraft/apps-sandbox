@@ -11,7 +11,7 @@ public class DbToDbWithMybatisToJpaJobTest extends AbstractJobTestSupport {
     @Test
     public void testDefault() {
         BatchContext batchContext = BatchContext.builder()
-                .jobClass(DbToDbWithMybatisToJpaJob.class)
+                .jobClass(DbMybatisToDbJpaJob.class)
                 .baseDate(getCurrentBaseDate())
                 .jobParameter("size", "123")
                 .build();

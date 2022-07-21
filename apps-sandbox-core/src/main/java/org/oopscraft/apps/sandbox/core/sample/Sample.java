@@ -2,8 +2,8 @@ package org.oopscraft.apps.sandbox.core.sample;
 
 import lombok.*;
 import org.modelmapper.ModelMapper;
-import org.oopscraft.apps.sandbox.core.sample.dto.SampleEntity;
-import org.oopscraft.apps.sandbox.core.sample.dto.SampleVo;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.mapper.SampleVo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,8 +1,6 @@
 package org.oopscraft.apps.sandbox.batch.sample.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.oopscraft.apps.batch.item.file.annotation.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
