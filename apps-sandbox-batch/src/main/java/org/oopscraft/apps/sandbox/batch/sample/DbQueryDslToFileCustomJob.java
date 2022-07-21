@@ -1,4 +1,4 @@
 package org.oopscraft.apps.sandbox.batch.sample;
 
-public class DbQueryDslToFileConfigurableJob {
+public class DbQueryDslToFileCustomJob {
 }

@@ -3,6 +3,7 @@ package org.oopscraft.apps.sandbox.core.sample.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import org.oopscraft.apps.sandbox.core.sample.vo.SampleVo;
 
 import java.util.List;
 

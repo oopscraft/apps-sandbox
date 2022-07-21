@@ -1,10 +1,7 @@
-package org.oopscraft.apps.sandbox.core.sample.repository;
+package org.oopscraft.apps.sandbox.core.sample.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.oopscraft.apps.core.data.BaseEntity;
 
@@ -14,14 +11,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "sandbox_sample")
+@Table(name = "sandbox_sample_backup")
 @Data
 @EqualsAndHashCode(callSuper=false)
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class SampleEntity extends BaseEntity {
-	
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class SampleBackupEntity extends BaseEntity {
+
     @Id
     @Column(name = "id", length=32)
     private String id;

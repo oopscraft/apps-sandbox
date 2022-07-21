@@ -4,7 +4,10 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.oopscraft.apps.core.data.PageRequest;
-import org.oopscraft.apps.sandbox.core.sample.mapper.SampleVo;
+import org.oopscraft.apps.sandbox.core.sample.entity.QSampleBackupEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.QSampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.SampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.vo.SampleVo;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.repository.NoRepositoryBean;
 

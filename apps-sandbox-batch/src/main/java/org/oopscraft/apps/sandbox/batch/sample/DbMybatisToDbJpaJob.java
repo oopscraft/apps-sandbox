@@ -6,11 +6,11 @@ import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.item.db.JpaDbItemWriter;
 import org.oopscraft.apps.batch.item.db.MybatisDbItemReader;
 import org.oopscraft.apps.batch.job.AbstractJob;
-import org.oopscraft.apps.sandbox.batch.sample.dao.DbMybatisToDbJpaMapper;
-import org.oopscraft.apps.sandbox.batch.sample.dto.SampleVo;
+import org.oopscraft.apps.sandbox.batch.sample.mapper.SampleMapper;
+import org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CompareSampleToBackupTasklet;
-import org.oopscraft.apps.sandbox.core.sample.repository.SampleBackupEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.SampleBackupEntity;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.item.ItemProcessor;
 
@@ -61,7 +61,7 @@ public class DbMybatisToDbJpaJob extends AbstractJob {
     public MybatisDbItemReader<SampleVo> mybatisReader() {
         return createMybatisDbItemReaderBuilder(SampleVo.class)
                 .name("mybatisReader")
-                .mapperClass(DbMybatisToDbJpaMapper.class)
+                .mapperClass(SampleMapper.class)
                 .mapperMethod("selectSamples")
                 .parameter("limit", size)
                 .build();

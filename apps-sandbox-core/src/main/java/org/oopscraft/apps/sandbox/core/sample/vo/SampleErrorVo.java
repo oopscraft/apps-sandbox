@@ -1,4 +1,4 @@
-package org.oopscraft.apps.sandbox.batch.sample.dto;
+package org.oopscraft.apps.sandbox.core.sample.vo;
 
 import lombok.*;
 
@@ -7,10 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper=false)
+@Builder(toBuilder = true)
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SampleVo {
+@AllArgsConstructor
+public class SampleErrorVo {
 
     private String id;
 
@@ -30,12 +31,10 @@ public class SampleVo {
 
     private java.sql.Timestamp timestamp;
 
-    private LocalDate localDate;
-
     private LocalDateTime localDateTime;
 
-    private String lobText;
+    private LocalDate localDate;
 
-    private String cryptoText;
+    private String lobText;
 
 }

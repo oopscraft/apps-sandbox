@@ -1,4 +1,4 @@
-package org.oopscraft.apps.sandbox.core.sample.repository;
+package org.oopscraft.apps.sandbox.core.sample.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

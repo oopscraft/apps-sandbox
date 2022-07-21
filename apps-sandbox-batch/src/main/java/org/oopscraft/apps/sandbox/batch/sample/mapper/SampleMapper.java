@@ -1,4 +1,4 @@
-package org.oopscraft.apps.sandbox.batch.sample.dao;
+package org.oopscraft.apps.sandbox.batch.sample.mapper;
 
 
 import org.apache.ibatis.annotations.Mapper;
@@ -7,7 +7,7 @@ import org.apache.ibatis.cursor.Cursor;
 import org.oopscraft.apps.sandbox.batch.bak.dto.SampleVo;
 
 @Mapper
-public interface DbMybatisToDbJpaMapper {
+public interface SampleMapper {
 
     public Cursor<SampleVo> selectSamples(@Param("limit")int limit);
 

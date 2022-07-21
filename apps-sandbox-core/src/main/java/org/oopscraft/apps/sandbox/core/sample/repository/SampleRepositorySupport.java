@@ -1,7 +1,7 @@
 package org.oopscraft.apps.sandbox.core.sample.repository;
 
 import org.oopscraft.apps.core.data.PageRequest;
-import org.oopscraft.apps.sandbox.core.sample.mapper.SampleVo;
+import org.oopscraft.apps.sandbox.core.sample.vo.SampleVo;
 
 import java.util.List;
 

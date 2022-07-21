@@ -8,12 +8,12 @@ import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.item.db.QueryDslDbItemReader;
 import org.oopscraft.apps.batch.job.AbstractJob;
-import org.oopscraft.apps.sandbox.batch.sample.dto.SampleVo;
+import org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CompareSampleToBackupTasklet;
 import org.oopscraft.apps.sandbox.core.sample.repository.SampleBackupRepository;
-import org.oopscraft.apps.sandbox.core.sample.dto.QSampleEntity;
-import org.oopscraft.apps.sandbox.core.sample.repository.SampleBackupEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.QSampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.SampleBackupEntity;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.item.ItemWriter;
 

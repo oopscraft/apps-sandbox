@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.core.data.PageRequest;
 import org.oopscraft.apps.core.data.PageRowBounds;
 import org.oopscraft.apps.core.data.TransactionTemplateUtils;
+import org.oopscraft.apps.sandbox.core.sample.entity.*;
 import org.oopscraft.apps.sandbox.core.sample.repository.*;
 import org.oopscraft.apps.sandbox.core.sample.mapper.SampleMapper;
 import org.springframework.data.domain.Page;
