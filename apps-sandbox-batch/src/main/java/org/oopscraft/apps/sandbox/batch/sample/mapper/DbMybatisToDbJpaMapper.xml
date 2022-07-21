@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.oopscraft.apps.sandbox.batch.sample.mapper.SampleMapper">
+<mapper namespace="org.oopscraft.apps.sandbox.batch.sample.mapper.DbMybatisToDbJpaMapper">
 
     <resultMap id="sample" type="org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo">
         <id property="id" column="user_id" />

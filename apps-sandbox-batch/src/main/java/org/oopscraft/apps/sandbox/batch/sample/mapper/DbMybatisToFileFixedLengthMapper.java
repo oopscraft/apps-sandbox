@@ -7,7 +7,7 @@ import org.apache.ibatis.cursor.Cursor;
 import org.oopscraft.apps.sandbox.batch.bak.dto.SampleVo;
 
 @Mapper
-public interface SampleMapper {
+public interface DbMybatisToFileFixedLengthMapper {
 
     public Cursor<SampleVo> selectSamples(@Param("limit")int limit);
 
