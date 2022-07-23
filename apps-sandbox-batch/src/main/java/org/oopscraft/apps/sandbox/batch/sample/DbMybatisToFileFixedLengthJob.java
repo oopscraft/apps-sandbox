@@ -33,7 +33,7 @@ public class DbMybatisToFileFixedLengthJob extends AbstractJob {
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_backup_%s.fld", getBatchContext().getBaseDate());
+        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 1. 테스트 데이터 생성
         addStep(new CreateSampleDbTasklet(size));

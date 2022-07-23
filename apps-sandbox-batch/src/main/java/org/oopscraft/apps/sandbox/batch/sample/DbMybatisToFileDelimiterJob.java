@@ -32,7 +32,7 @@ public class DbMybatisToFileDelimiterJob extends AbstractJob {
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_backup_%s.tsv", getBatchContext().getBaseDate());
+        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.tsv", getBatchContext().getBaseDate());
 
         // 1. 테스트 데이터 생성
         addStep(new CreateSampleDbTasklet(size));

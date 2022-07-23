@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class SampleBackupEntity extends BaseEntity {
 
     @Id
-    @Column(name = "id", length=32)
+    @Column(name = "id", length=64)
     private String id;
 
     @Column(name = "name", nullable = false)

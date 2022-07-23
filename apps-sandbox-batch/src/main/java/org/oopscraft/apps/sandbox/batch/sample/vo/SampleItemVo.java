@@ -2,6 +2,8 @@ package org.oopscraft.apps.sandbox.batch.sample.vo;
 
 import lombok.*;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,30 +14,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SampleItemVo {
 
+    private String sampleId;
+
     private String id;
 
     private String name;
 
     private int number;
 
-    private long longNumber;
-
-    private double doubleNumber;
-
-    private BigDecimal bigDecimal;
-
-    private java.sql.Date sqlDate;
-
-    private java.util.Date utilDate;
-
-    private java.sql.Timestamp timestamp;
-
     private LocalDate localDate;
 
     private LocalDateTime localDateTime;
-
-    private String lobText;
-
-    private String cryptoText;
 
 }
