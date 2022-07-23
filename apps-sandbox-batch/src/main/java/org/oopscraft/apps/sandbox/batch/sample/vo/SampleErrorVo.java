@@ -34,8 +34,8 @@ public class SampleErrorVo {
 
     private LocalDateTime localDateTime;
 
-    private String lob_text;
+    private String lobText;
 
-    private String crypto_text;
+    private String cryptoText;
 
 }

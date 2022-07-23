@@ -19,7 +19,7 @@ import java.util.Date;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CreateSampleTasklet extends AbstractTasklet {
+public class CreateSampleDbTasklet extends AbstractTasklet {
 
     private final long size;
 
@@ -47,8 +47,8 @@ public class CreateSampleTasklet extends AbstractTasklet {
                     .sqlDate(new java.sql.Date(System.currentTimeMillis()))
                     .utilDate(new Date())
                     .timestamp(new java.sql.Timestamp(System.currentTimeMillis()))
-                    .localDateTime(LocalDateTime.now())
                     .localDate(LocalDate.now())
+                    .localDateTime(LocalDateTime.now().withNano(0))
                     .lobText(String.format("가나다라동해물과백두산뷁읅읋흟갏궯ㄱㄴㄷㄹㄷㅄㅈ~~~%d",i))
                     .cryptoText(String.format("가나다라동해물과백두산뷁읅읋흟갏궯ㄱㄴㄷㄹㄷㅄㅈ~~~%d",i))
                     .build();

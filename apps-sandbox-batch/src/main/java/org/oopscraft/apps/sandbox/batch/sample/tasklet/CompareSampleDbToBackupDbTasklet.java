@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 @Slf4j
-public class CompareSampleToBackupTasklet extends AbstractTasklet {
+public class CompareSampleDbToBackupDbTasklet extends AbstractTasklet {
 
     @Autowired
     private SampleRepository sampleRepository;

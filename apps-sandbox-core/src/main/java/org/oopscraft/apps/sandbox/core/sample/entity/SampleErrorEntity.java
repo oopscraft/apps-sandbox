@@ -42,22 +42,18 @@ public class SampleErrorEntity extends BaseEntity {
     private BigDecimal bigDecimal;
 
     @Column(name = "sql_date")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.sql.Date sqlDate;
 
     @Column(name = "util_date")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date utilDate;
 
     @Column(name = "timestamp")
     private java.sql.Timestamp timestamp;
 
     @Column(name = "local_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;
 
     @Column(name = "local_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime localDateTime;
 
     @Column(name = "lob_text")

@@ -7,9 +7,9 @@ import org.oopscraft.apps.batch.item.db.JpaDbItemWriter;
 import org.oopscraft.apps.batch.item.db.MybatisDbItemReader;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.sandbox.batch.sample.mapper.DbMybatisToDbJpaMapper;
+import org.oopscraft.apps.sandbox.batch.sample.tasklet.CompareSampleDbToBackupDbTasklet;
+import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo;
-import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleTasklet;
-import org.oopscraft.apps.sandbox.batch.sample.tasklet.CompareSampleToBackupTasklet;
 import org.oopscraft.apps.sandbox.core.sample.entity.SampleBackupEntity;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.item.ItemProcessor;
@@ -32,20 +32,20 @@ public class DbMybatisToDbJpaJob extends AbstractJob {
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
         // 1. 테스트 데이터 생성
-        addStep(new CreateSampleTasklet(size));
+        addStep(new CreateSampleDbTasklet(size));
 
         // 2. 데이터 처리 (Mybatis reader -> Jpa writer)
-        addStep(copySampleStep());
+        addStep(copySampleToBackupStep());
 
         // 3. 결과 검증
-        addStep(new CompareSampleToBackupTasklet());
+        addStep(new CompareSampleDbToBackupDbTasklet());
     }
 
     /**
      * 데이터 복사
      * @return
      */
-    public Step copySampleStep() {
+    public Step copySampleToBackupStep() {
         return stepBuilderFactory.get("copySample")
                 .<SampleVo, SampleBackupEntity>chunk(10)
                 .reader(mybatisReader())

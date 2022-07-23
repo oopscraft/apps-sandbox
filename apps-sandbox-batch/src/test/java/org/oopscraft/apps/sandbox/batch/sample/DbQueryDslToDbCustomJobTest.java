@@ -6,17 +6,16 @@ import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.test.AbstractJobTestSupport;
 
 @Slf4j
-public class DbToDbWithMybatisToJpaJobTest extends AbstractJobTestSupport {
+public class DbQueryDslToDbCustomJobTest extends AbstractJobTestSupport {
 
     @Test
     public void testDefault() {
         BatchContext batchContext = BatchContext.builder()
-                .jobClass(DbMybatisToDbJpaJob.class)
+                .jobClass(DbQueryDslToDbCustomJob.class)
                 .baseDate(getCurrentBaseDate())
                 .jobParameter("size", "123")
                 .build();
         launchJob(batchContext);
-
     }
 
 }

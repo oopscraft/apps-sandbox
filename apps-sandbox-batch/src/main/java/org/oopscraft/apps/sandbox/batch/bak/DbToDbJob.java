@@ -32,7 +32,7 @@ public class DbToDbJob {
 //        forceToFailCount = Optional.ofNullable(batchContext.getJobParameter("forceToFailCount")).map(value -> Integer.valueOf(value)).orElse(forceToFailCount);
 //
 //        // 1. 샘플 데이터 초기화
-//        addTasklet(CreateSampleTasklet.builder()
+//        addTasklet(CreateSampleDbTasklet.builder()
 //                .limit(limit)
 //                .build());
 //
@@ -67,7 +67,7 @@ public class DbToDbJob {
 //        }
 //
 //        // 3. 결과 검증
-//        addTasklet(CompareSampleToBackupTasklet.builder()
+//        addTasklet(CompareSampleDbToBackupDbTasklet.builder()
 //                .build());
 //
 //    }

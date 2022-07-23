@@ -46,7 +46,7 @@ public class TransactionManuallyJob extends AbstractJob {
         int limit = Integer.parseInt(batchContext.getJobParameter("limit"));
 
 //        // 1. creates sample data
-//        addTasklet(CreateSampleTasklet.builder()
+//        addTasklet(CreateSampleDbTasklet.builder()
 //                .limit(limit)
 //                .build());
 

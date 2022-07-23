@@ -8,9 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.item.db.QueryDslDbItemReader;
 import org.oopscraft.apps.batch.job.AbstractJob;
+import org.oopscraft.apps.sandbox.batch.sample.tasklet.CompareSampleDbToBackupDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo;
-import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleTasklet;
-import org.oopscraft.apps.sandbox.batch.sample.tasklet.CompareSampleToBackupTasklet;
+import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleDbTasklet;
 import org.oopscraft.apps.sandbox.core.sample.repository.SampleBackupRepository;
 import org.oopscraft.apps.sandbox.core.sample.entity.QSampleEntity;
 import org.oopscraft.apps.sandbox.core.sample.entity.SampleBackupEntity;
@@ -32,6 +32,10 @@ public class DbQueryDslToDbCustomJob extends AbstractJob {
 
     private ModelMapper modelMapper = new ModelMapper();
 
+    /**
+     * initailize
+     * @param batchContext
+     */
     @Override
     public void initialize(BatchContext batchContext) {
 
@@ -41,13 +45,13 @@ public class DbQueryDslToDbCustomJob extends AbstractJob {
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
         // 1. 테스트 데이터 생성
-        addStep(new CreateSampleTasklet(size));
+        addStep(new CreateSampleDbTasklet(size));
 
         // 2. 데이터 처리 (Query DSL reader -> custom writer)
         addStep(copySampleStep());
 
         // 3. 결과 검증
-        addStep(new CompareSampleToBackupTasklet());
+        addStep(new CompareSampleDbToBackupDbTasklet());
     }
 
     /**
@@ -68,8 +72,8 @@ public class DbQueryDslToDbCustomJob extends AbstractJob {
      */
     public QueryDslDbItemReader<SampleVo> queryDslReader() {
         QSampleEntity qSampleEntity = QSampleEntity.sampleEntity;
-        JPAQuery<SampleVo> query = new JPAQuery<>();
-        query.select(Projections.fields(SampleVo.class,
+        JPAQuery<SampleVo> query = jpaQueryFactory
+                .select(Projections.fields(SampleVo.class,
                         qSampleEntity.id,
                         qSampleEntity.name,
                         qSampleEntity.number,
