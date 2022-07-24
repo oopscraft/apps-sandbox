@@ -9,13 +9,11 @@ import org.oopscraft.apps.sandbox.batch.sample.vo.SampleBackupVo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @RequiredArgsConstructor
 class DbMybatisToDbMybatisMapperTest extends AbstractMapperTest {
 
-    private final DbMybatisToDbMybatisMapper dbMybatisToDbMybatisMapper;
+    private final DbToDbWithMybatisToMybatisMapper dbMybatisToDbMybatisMapper;
 
     @Test
     public void insertSampleBackup() {

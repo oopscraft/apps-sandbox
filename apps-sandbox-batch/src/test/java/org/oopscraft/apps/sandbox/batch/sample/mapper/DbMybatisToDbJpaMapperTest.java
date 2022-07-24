@@ -7,15 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.oopscraft.apps.core.test.AbstractMapperTest;
 import org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @RequiredArgsConstructor
 class DbMybatisToDbJpaMapperTest extends AbstractMapperTest {
 
-    private final DbMybatisToDbJpaMapper dbMybatisToDbJpaMapper;
+    private final DbToDbWithMybatisToJpaMapper dbMybatisToDbJpaMapper;
     @Test
     void selectSamples() {
         Cursor<SampleVo> samplesCursor = dbMybatisToDbJpaMapper.selectSamples(1234);

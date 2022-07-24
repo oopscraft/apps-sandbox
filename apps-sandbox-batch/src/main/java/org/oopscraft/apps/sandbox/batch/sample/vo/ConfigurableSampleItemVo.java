@@ -4,9 +4,6 @@ import lombok.*;
 import org.oopscraft.apps.batch.item.file.annotation.Align;
 import org.oopscraft.apps.batch.item.file.annotation.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,7 +11,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SampleItemVo {
+public class ConfigurableSampleItemVo {
+
+    @Length(1)
+    private String type;
 
     @Length(100)
     private String sampleId;

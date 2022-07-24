@@ -1,5 +1,6 @@
 package org.oopscraft.apps.sandbox.batch.sample.tasklet;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.oopscraft.apps.batch.BatchContext;
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 @Slf4j
-@RequiredArgsConstructor
+@Builder
 public class CreateSampleDbTasklet extends AbstractTasklet {
 
     private final long size;
@@ -33,15 +34,7 @@ public class CreateSampleDbTasklet extends AbstractTasklet {
     @Override
     public void doExecute(BatchContext batchContext, ExecutionContext executionContext) throws Exception {
 
-        // 1. 데이터 삭제
-        jpaQueryFactory.delete(QSampleEntity.sampleEntity).execute();
-        commit();
-        jpaQueryFactory.delete(QSampleItemEntity.sampleItemEntity).execute();
-        commit();
-        jpaQueryFactory.delete(QSampleBackupEntity.sampleBackupEntity).execute();
-        commit();
-
-        // 2. 테스트 데이터 입력 처리
+        // 테스트 데이터 입력 처리
         for(int i = 0; i < size; i ++ ) {
             SampleEntity sampleEntity = SampleEntity.builder()
                     .id(String.format("id-%d",i))

@@ -2,6 +2,9 @@ package org.oopscraft.apps.sandbox.batch.sample.tasklet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.job.AbstractTasklet;
@@ -15,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 @Slf4j
+@Builder
 public class CompareSampleDbToBackupDbTasklet extends AbstractTasklet {
+
+    @Builder.Default
+    private boolean includeItem = false;
 
     @Autowired
     private SampleRepository sampleRepository;
@@ -51,6 +58,11 @@ public class CompareSampleDbToBackupDbTasklet extends AbstractTasklet {
                 throw new RuntimeException(e);
             }
         });
+
+        // 3. sample item vs sample item backup
+        if(includeItem) {
+
+        }
     }
 
 }
