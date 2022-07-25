@@ -22,6 +22,12 @@ public class DbToFileWithMybatisToFixedLengthJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
+    /**
+     * initialize
+     * @param batchContext
+     */
     @Override
     public void initialize(BatchContext batchContext) {
 
@@ -29,8 +35,7 @@ public class DbToFileWithMybatisToFixedLengthJob extends AbstractJob {
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
-
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -53,7 +58,7 @@ public class DbToFileWithMybatisToFixedLengthJob extends AbstractJob {
      * @return
      */
     public Step dbToFileStep(String filePath) {
-        return stepBuilderFactory.get("copySampleDbToFileStep")
+        return stepBuilderFactory.get("dbToFileStep")
                 .<SampleVo, SampleVo>chunk(10)
                 .reader(dbItemWriter())
                 .writer(fileItemWriter(filePath))
