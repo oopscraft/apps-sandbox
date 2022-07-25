@@ -31,6 +31,8 @@ public class FileToDbWithConfigurableToCustomJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
     private final SampleBackupRepository sampleBackupRepository;
 
     private final SampleItemBackupRepository sampleItemBackupRepository;
@@ -55,8 +57,7 @@ public class FileToDbWithConfigurableToCustomJob extends AbstractJob {
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
-
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
