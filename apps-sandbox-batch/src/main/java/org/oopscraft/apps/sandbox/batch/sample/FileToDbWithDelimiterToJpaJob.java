@@ -1,7 +1,6 @@
 package org.oopscraft.apps.sandbox.batch.sample;
 
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.batch.BatchConfig;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.dependency.BatchComponentScan;
@@ -23,6 +22,12 @@ public class FileToDbWithDelimiterToJpaJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
+    /**
+     * initialize
+     * @param batchContext
+     */
     @Override
     public void initialize(BatchContext batchContext) {
 
@@ -30,8 +35,7 @@ public class FileToDbWithDelimiterToJpaJob extends AbstractJob {
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
-
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.tsv", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -44,17 +48,17 @@ public class FileToDbWithDelimiterToJpaJob extends AbstractJob {
                 .build());
 
         // 2. 데이터 처리
-        addStep(fileToDbStep(filePath));
+        addStep(fileToDbStep());
    }
 
     /**
-     * 데이터 복사
+     * file to db step
      * @return
      */
-    public Step fileToDbStep(String filePath) {
+    public Step fileToDbStep() {
         return stepBuilderFactory.get("fileToDbStep")
                 .<SampleVo, SampleBackupEntity>chunk(10)
-                .reader(fileItemReader(filePath))
+                .reader(fileItemReader())
                 .processor(convertProcessor())
                 .writer(dbItemWriter())
                 .build();
@@ -64,7 +68,7 @@ public class FileToDbWithDelimiterToJpaJob extends AbstractJob {
      * file reader
      * @return
      */
-    public DelimiterFileItemReader<SampleVo> fileItemReader(String filePath) {
+    public DelimiterFileItemReader<SampleVo> fileItemReader() {
         return createDelimiterFileItemReaderBuilder(SampleVo.class)
                 .name("fileItemReader")
                 .filePath(filePath)

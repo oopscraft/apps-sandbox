@@ -6,6 +6,9 @@ import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.item.file.DelimiterFileItemWriter;
 import org.oopscraft.apps.batch.item.file.FixedLengthFileItemWriter;
 import org.oopscraft.apps.batch.job.AbstractTasklet;
+import org.oopscraft.apps.sandbox.batch.sample.vo.ConfigurableSampleItemVo;
+import org.oopscraft.apps.sandbox.batch.sample.vo.ConfigurableSampleVo;
+import org.oopscraft.apps.sandbox.batch.sample.vo.SampleItemVo;
 import org.oopscraft.apps.sandbox.batch.sample.vo.SampleVo;
 import org.springframework.batch.item.ExecutionContext;
 
@@ -25,6 +28,12 @@ public class CreateConfigurableSampleFileTasklet extends AbstractTasklet {
 
     private String filePath;
 
+    /**
+     * doExecute
+     * @param batchContext
+     * @param executionContext
+     * @throws Exception
+     */
     @Override
     public void doExecute(BatchContext batchContext, ExecutionContext executionContext) throws Exception {
         switch(fileType){
@@ -44,18 +53,24 @@ public class CreateConfigurableSampleFileTasklet extends AbstractTasklet {
      * @param executionContext
      */
     public void createDelimiterSampleFile(ExecutionContext executionContext) throws Exception {
-        DelimiterFileItemWriter<SampleVo> sampleFileWriter = null;
-        try {
-            sampleFileWriter = createDelimiterFileItemWriterBuilder(SampleVo.class)
+        DelimiterFileItemWriter<SampleVo> fileItemWriter = createDelimiterFileItemWriterBuilder(SampleVo.class)
                     .filePath(filePath)
                     .build();
-            sampleFileWriter.open(executionContext);
-            for(int i = 0; i < size; i ++) {
-                SampleVo sampleVo = createSampleVo(i);
-                sampleFileWriter.write(sampleVo);
+        try {
+            fileItemWriter.open(executionContext);
+            for (int i = 0; i < size; i++) {
+                ConfigurableSampleVo sampleVo = createConfigurableSampleVo(i);
+                fileItemWriter.write(sampleVo);
+                for (int ii = 0; ii < 3; ii++) {
+                    ConfigurableSampleItemVo sampleItemVo = createConfigurableSampleItemVo(sampleVo.getId(), ii);
+                    fileItemWriter.write(sampleItemVo);
+                }
             }
+        }catch(Exception e){
+            log.error(e.getMessage());
+            throw e;
         }finally{
-            sampleFileWriter.close();
+            fileItemWriter.close();
         }
     }
 
@@ -64,28 +79,32 @@ public class CreateConfigurableSampleFileTasklet extends AbstractTasklet {
      * @param executionContext
      */
     public void createFixedLengthSampleFile(ExecutionContext executionContext) throws Exception {
-        FixedLengthFileItemWriter<SampleVo> sampleFileWriter = null;
+        FixedLengthFileItemWriter<SampleVo> fileItemWriter = createFixedLengthFileItemWriterBuilder(SampleVo.class)
+                .filePath(filePath)
+                .build();
         try {
-            sampleFileWriter = createFixedLengthFileItemWriterBuilder(SampleVo.class)
-                    .filePath(filePath)
-                    .build();
-            sampleFileWriter.open(executionContext);
+            fileItemWriter.open(executionContext);
             for(int i = 0; i < size; i++){
-                SampleVo sampleVo = createSampleVo(i);
-                sampleFileWriter.write(sampleVo);
+                ConfigurableSampleVo sampleVo = createConfigurableSampleVo(i);
+                fileItemWriter.write(sampleVo);
+                for (int ii = 0; ii < 3; ii++) {
+                    ConfigurableSampleItemVo sampleItemVo = createConfigurableSampleItemVo(sampleVo.getId(), ii);
+                    fileItemWriter.write(sampleItemVo);
+                }
             }
         } finally{
-            sampleFileWriter.close();
+            fileItemWriter.close();
         }
     }
 
     /**
-     * create sample vo
+     * create configurable sample vo
      * @param i
      * @return
      */
-    private SampleVo createSampleVo(int i) {
-        return SampleVo.builder()
+    private ConfigurableSampleVo createConfigurableSampleVo(int i) {
+        return ConfigurableSampleVo.builder()
+                .type("A")
                 .id(String.format("id-%d",i))
                 .name(String.format("홍길동%s", i))
                 .number(i)
@@ -99,6 +118,21 @@ public class CreateConfigurableSampleFileTasklet extends AbstractTasklet {
                 .localDateTime(LocalDateTime.now().withNano(0))
                 .lobText(String.format("가나다라동해물과백두산뷁읅읋흟갏궯ㄱㄴㄷㄹㄷㅄㅈ~~~%d",i))
                 .cryptoText(String.format("가나다라동해물과백두산뷁읅읋흟갏궯ㄱㄴㄷㄹㄷㅄㅈ~~~%d",i))
+                .build();
+    }
+
+    /**
+     * create configurable sample item vo
+     */
+    private ConfigurableSampleItemVo createConfigurableSampleItemVo(String sampleId, int i) {
+        return ConfigurableSampleItemVo.builder()
+                .type("B")
+                .sampleId(sampleId)
+                .id(String.format("id-%d", i))
+                .name(String.format("name-%s", i))
+                .number(123+i)
+                .localDate(LocalDate.now())
+                .localDateTime(LocalDateTime.now())
                 .build();
     }
 
