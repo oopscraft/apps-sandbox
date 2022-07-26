@@ -39,13 +39,13 @@ public class DbToDbWithQueryDslToCustomJob extends AbstractJob {
     private ModelMapper modelMapper = new ModelMapper();
 
     /**
-     * initailize
+     * initialize
      * @param batchContext
      */
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
@@ -64,7 +64,7 @@ public class DbToDbWithQueryDslToCustomJob extends AbstractJob {
     }
 
     /**
-     * 데이터 복사
+     * db to db step
      * @return
      */
     public Step dbToDbStep() {

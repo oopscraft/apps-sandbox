@@ -17,7 +17,8 @@ import org.springframework.batch.repeat.RepeatStatus;
 import java.util.List;
 import java.util.Optional;
 
-@Deprecated
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @Slf4j
 @RequiredArgsConstructor
 @BatchComponentScan
@@ -44,12 +45,14 @@ public class FileToFileWithConfigurableToConfigurableJob extends AbstractJob {
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
-        inputFilePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
-        outputFilePath = BatchConfig.getDataDirectory(this) + String.format("sample_backup_%s.fld", getBatchContext().getBaseDate());
+
+        // defines
+        inputFilePath = BatchConfig.getDataDirectory(this) + String.format("input_sample_%s.fld", getBatchContext().getBaseDate());
+        outputFilePath = BatchConfig.getDataDirectory(this) + String.format("output_sample_backup_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -125,6 +128,7 @@ public class FileToFileWithConfigurableToConfigurableJob extends AbstractJob {
                     if(item instanceof ConfigurableSampleVo) {
                         ConfigurableSampleVo sampleVo = (ConfigurableSampleVo)item;
                         ConfigurableSampleBackupVo sampleBackupVo = ConfigurableSampleBackupVo.builder()
+                                .type("A")
                                 .id(sampleVo.getId())
                                 .name(sampleVo.getName())
                                 .number(sampleVo.getNumber())
@@ -147,6 +151,7 @@ public class FileToFileWithConfigurableToConfigurableJob extends AbstractJob {
                     if(item instanceof ConfigurableSampleItemVo) {
                         ConfigurableSampleItemVo sampleItemVo = (ConfigurableSampleItemVo)item;
                         ConfigurableSampleItemBackupVo sampleItemBackupVo = ConfigurableSampleItemBackupVo.builder()
+                                .type("B")
                                 .sampleId(sampleItemVo.getSampleId())
                                 .id(sampleItemVo.getId())
                                 .name(sampleItemVo.getName())
@@ -173,10 +178,10 @@ public class FileToFileWithConfigurableToConfigurableJob extends AbstractJob {
     public Step compareCountStep() {
         return stepBuilderFactory.get("compareCountStep")
                 .tasklet((contribution, chunkContext) -> {
-//                    log.info("== readCountTypeA:{}, writeCountTypeA:{}, sampleBackupCount:{}", readCountTypeA, writeCountTypeA, sampleBackupCount);
-//                    log.info("== readCountTypeB:{}, writeCountTypeB:{}, sampleItemBackupCount:{}", readCountTypeB, writeCountTypeB, sampleItemBackupCount);
-//                    Assert.assertEquals(readCountTypeA, writeCountTypeA, sampleBackupCount);
-//                    Assert.assertEquals(readCountTypeB, writeCountTypeB, sampleItemBackupCount);
+                    log.info("== readCountTypeA:{}, writeCountTypeA:{}", readCountTypeA, writeCountTypeA);
+                    log.info("== readCountTypeB:{}, writeCountTypeB:{}", readCountTypeB, writeCountTypeB);
+                    assertEquals(readCountTypeA, writeCountTypeA);
+                    assertEquals(readCountTypeB, writeCountTypeB);
                     return RepeatStatus.FINISHED;
                 }).build();
     }

@@ -30,19 +30,22 @@ public class DbToFileWithQueryDslToConfigurableJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
     /**
-     * initailize
+     * initialize
      * @param batchContext
      */
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.dat", getBatchContext().getBaseDate());
+        // defines
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.dat", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -51,18 +54,18 @@ public class DbToFileWithQueryDslToConfigurableJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리
-        addStep(dbToFileStep(filePath));
+        addStep(dbToFileStep());
     }
 
     /**
-     * 데이터 복사
+     * db to file step
      * @return
      */
-    public Step dbToFileStep(String filePath) {
+    public Step dbToFileStep() {
         return stepBuilderFactory.get("copySample")
                 .<SampleVo, SampleVo>chunk(10)
                 .reader(dbItemReader())
-                .writer(fileItemWriter(filePath))
+                .writer(fileItemWriter())
                 .build();
     }
 
@@ -99,7 +102,7 @@ public class DbToFileWithQueryDslToConfigurableJob extends AbstractJob {
      * db writer
      * @return
      */
-    public DelimiterFileItemWriterConfigurable<SampleVo> fileItemWriter(String filePath) {
+    public DelimiterFileItemWriterConfigurable<SampleVo> fileItemWriter() {
         DelimiterFileItemWriterConfigurable<SampleVo> fileWriter = new DelimiterFileItemWriterConfigurable<>() {
 
             @Override

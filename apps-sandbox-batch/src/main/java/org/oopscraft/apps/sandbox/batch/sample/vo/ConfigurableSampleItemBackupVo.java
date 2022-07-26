@@ -16,22 +16,22 @@ public class ConfigurableSampleItemBackupVo {
     @Length(1)
     private String type;
 
-    @Length(100)
+    @Length(32)
     private String sampleId;
 
-    @Length(100)
+    @Length(32)
     private String id;
 
-    @Length(100)
+    @Length(50)
     private String name;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(100)
+    @Length(32)
     private LocalDate localDate;
 
-    @Length(100)
+    @Length(32)
     private LocalDateTime localDateTime;
 
 }

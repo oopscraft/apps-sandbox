@@ -17,43 +17,43 @@ public class ConfigurableSampleBackupVo {
     @Length(1)
     private String type;
 
-    @Length(100)
+    @Length(32)
     private String id;
 
-    @Length(100)
+    @Length(50)
     private String name;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private long longNumber;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private double doubleNumber;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private BigDecimal bigDecimal;
 
-    @Length(100)
+    @Length(32)
     private java.sql.Date sqlDate;
 
-    @Length(100)
+    @Length(32)
     private java.util.Date utilDate;
 
-    @Length(100)
+    @Length(32)
     private java.sql.Timestamp timestamp;
 
-    @Length(100)
+    @Length(32)
     private LocalDate localDate;
 
-    @Length(100)
+    @Length(32)
     private LocalDateTime localDateTime;
 
-    @Length(1024)
+    @Length(1000)
     private String lobText;
 
-    @Length(1024)
+    @Length(1000)
     private String cryptoText;
 
 }

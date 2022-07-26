@@ -31,10 +31,12 @@ public class DbToFileWithMybatisToFixedLengthJob extends AbstractJob {
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
+
+        // defines
         filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화
@@ -44,7 +46,7 @@ public class DbToFileWithMybatisToFixedLengthJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리
-        addStep(dbToFileStep(filePath));
+        addStep(dbToFileStep());
 
         // 3. 결과 검증
         addStep(CompareFileToSampleDbTasklet.builder()
@@ -57,7 +59,7 @@ public class DbToFileWithMybatisToFixedLengthJob extends AbstractJob {
      * 데이터 복사
      * @return
      */
-    public Step dbToFileStep(String filePath) {
+    public Step dbToFileStep() {
         return stepBuilderFactory.get("dbToFileStep")
                 .<SampleVo, SampleVo>chunk(10)
                 .reader(dbItemWriter())

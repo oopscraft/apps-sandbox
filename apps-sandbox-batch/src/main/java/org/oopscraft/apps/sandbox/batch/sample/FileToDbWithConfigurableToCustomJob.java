@@ -10,15 +10,14 @@ import org.oopscraft.apps.batch.item.file.FixedLengthFileItemReaderConfigurable;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.ClearAllSampleDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateConfigurableSampleFileTasklet;
-import org.oopscraft.apps.sandbox.batch.sample.vo.*;
+import org.oopscraft.apps.sandbox.batch.sample.vo.ConfigurableSampleItemVo;
+import org.oopscraft.apps.sandbox.batch.sample.vo.ConfigurableSampleVo;
+import org.oopscraft.apps.sandbox.batch.sample.vo.ConfigurableVo;
 import org.oopscraft.apps.sandbox.core.sample.entity.SampleBackupEntity;
 import org.oopscraft.apps.sandbox.core.sample.entity.SampleItemBackupEntity;
 import org.oopscraft.apps.sandbox.core.sample.repository.SampleBackupRepository;
 import org.oopscraft.apps.sandbox.core.sample.repository.SampleItemBackupRepository;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.repeat.RepeatStatus;
 
@@ -47,16 +46,18 @@ public class FileToDbWithConfigurableToCustomJob extends AbstractJob {
     private long writeCountTypeB = 0;
 
     /**
-     * initailize
+     * initialize
      * @param batchContext
      */
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
+
+        // defines
         filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화

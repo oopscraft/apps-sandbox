@@ -26,15 +26,18 @@ public class DbToFileWithQueryDslToDelimiterJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.tsv", getBatchContext().getBaseDate());
+        // defines
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.tsv", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -43,7 +46,7 @@ public class DbToFileWithQueryDslToDelimiterJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리
-        addStep(dbToFileStep(filePath));
+        addStep(dbToFileStep());
 
         // 3. 결과 검증
         addStep(CompareFileToSampleDbTasklet.builder()
@@ -53,14 +56,14 @@ public class DbToFileWithQueryDslToDelimiterJob extends AbstractJob {
     }
 
     /**
-e    * 데이터 복사
+e    * db to file step
      * @return
      */
-    public Step dbToFileStep(String filePath) {
+    public Step dbToFileStep() {
         return stepBuilderFactory.get("copySample")
                 .<SampleVo, SampleVo>chunk(10)
                 .reader(dbItemReader())
-                .writer(fileItemWriter(filePath))
+                .writer(fileItemWriter())
                 .build();
     }
 
@@ -98,7 +101,7 @@ e    * 데이터 복사
      *
      * @return
      */
-    public DelimiterFileItemWriter<SampleVo> fileItemWriter(String filePath) {
+    public DelimiterFileItemWriter<SampleVo> fileItemWriter() {
         return createDelimiterFileItemWriterBuilder(SampleVo.class)
                 .name("fileItemWriter")
                 .filePath(filePath)

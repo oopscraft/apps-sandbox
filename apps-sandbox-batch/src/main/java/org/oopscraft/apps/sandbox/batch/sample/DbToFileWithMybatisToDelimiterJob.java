@@ -1,7 +1,6 @@
 package org.oopscraft.apps.sandbox.batch.sample;
 
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.batch.BatchConfig;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.dependency.BatchComponentScan;
@@ -23,15 +22,18 @@ public class DbToFileWithMybatisToDelimiterJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.tsv", getBatchContext().getBaseDate());
+        // defines
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.tsv", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -40,7 +42,7 @@ public class DbToFileWithMybatisToDelimiterJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리
-        addStep(copySampleDbToFileStep(filePath));
+        addStep(dbToFileStep());
 
         // 3. 결과 검증
         addStep(CompareFileToSampleDbTasklet.builder()
@@ -53,7 +55,7 @@ public class DbToFileWithMybatisToDelimiterJob extends AbstractJob {
      * 데이터 복사
      * @return
      */
-    public Step copySampleDbToFileStep(String filePath) {
+    public Step dbToFileStep() {
         return stepBuilderFactory.get("copySample")
                 .<SampleVo, SampleVo>chunk(10)
                 .reader(dbItemWriter())

@@ -29,13 +29,13 @@ public class DbToDbWithQueryDslToJpaJob extends AbstractJob {
     private long size;
 
     /**
-     * initailize
+     * initialize
      * @param batchContext
      */
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
@@ -47,22 +47,22 @@ public class DbToDbWithQueryDslToJpaJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리 (Query DSL reader -> custom writer)
-        addStep(copySampleStep());
+        addStep(doToDbStep());
 
         // 3. 결과 검증
         addStep(CompareSampleDbToBackupDbTasklet.builder().build());
     }
 
     /**
-     * 데이터 복사
+     * do to do step
      * @return
      */
-    public Step copySampleStep() {
+    public Step doToDbStep() {
         return stepBuilderFactory.get("copySample")
                 .<SampleVo,SampleBackupEntity>chunk(10)
-                .reader(queryDslReader())
+                .reader(dbItemReader())
                 .processor(convertProcessor())
-                .writer(jpaWriter())
+                .writer(dbItemWriter())
                 .build();
     }
 
@@ -70,7 +70,7 @@ public class DbToDbWithQueryDslToJpaJob extends AbstractJob {
      * query DSL reader
      * @return
      */
-    public QueryDslDbItemReader<SampleVo> queryDslReader() {
+    public QueryDslDbItemReader<SampleVo> dbItemReader() {
         QSampleEntity qSampleEntity = QSampleEntity.sampleEntity;
         JPAQuery<SampleVo> query = jpaQueryFactory
                 .select(Projections.fields(SampleVo.class,
@@ -113,7 +113,7 @@ public class DbToDbWithQueryDslToJpaJob extends AbstractJob {
      * Jpa writer
      * @return
      */
-    public JpaDbItemWriter<SampleBackupEntity> jpaWriter() {
+    public JpaDbItemWriter<SampleBackupEntity> dbItemWriter() {
         return createJpaDbItemWriterBuilder(SampleBackupEntity.class)
                 .name("jpaWriter")
                 .build();

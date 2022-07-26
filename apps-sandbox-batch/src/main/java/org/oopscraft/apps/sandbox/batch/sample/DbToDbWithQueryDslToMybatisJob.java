@@ -32,13 +32,13 @@ public class DbToDbWithQueryDslToMybatisJob extends AbstractJob {
     private ModelMapper modelMapper = new ModelMapper();
 
     /**
-     * initailize
+     * initialize
      * @param batchContext
      */
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
@@ -50,22 +50,22 @@ public class DbToDbWithQueryDslToMybatisJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리
-        addStep(copySampleStep());
+        addStep(doToDbStep());
 
         // 3. 결과 검증
         addStep(CompareSampleDbToBackupDbTasklet.builder().build());
     }
 
     /**
-     * 데이터 복사
+     * db to db step
      * @return
      */
-    public Step copySampleStep() {
+    public Step doToDbStep() {
         return stepBuilderFactory.get("copySample")
                 .<SampleVo, SampleBackupVo>chunk(10)
-                .reader(queryDslReader())
+                .reader(dbItemReader())
                 .processor(convertProcessor())
-                .writer(dbWriter())
+                .writer(dbItemWriter())
                 .build();
     }
 
@@ -73,7 +73,7 @@ public class DbToDbWithQueryDslToMybatisJob extends AbstractJob {
      * query DSL reader
      * @return
      */
-    public QueryDslDbItemReader<SampleVo> queryDslReader() {
+    public QueryDslDbItemReader<SampleVo> dbItemReader() {
         QSampleEntity qSampleEntity = QSampleEntity.sampleEntity;
         JPAQuery<SampleVo> query = jpaQueryFactory
                 .select(Projections.fields(SampleVo.class,
@@ -115,7 +115,7 @@ public class DbToDbWithQueryDslToMybatisJob extends AbstractJob {
      * db writer
      * @return
      */
-    public MybatisDbItemWriter<SampleBackupVo> dbWriter() {
+    public MybatisDbItemWriter<SampleBackupVo> dbItemWriter() {
         return createMybatisDbItemWriterBuilder(SampleBackupVo.class)
                 .mapperClass(DbToDbWithQueryDslToMybatisMapper.class)
                 .mapperMethod("insertSampleBackup")

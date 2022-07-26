@@ -54,8 +54,9 @@ public class CreateConfigurableSampleFileTasklet extends AbstractTasklet {
      */
     public void createDelimiterSampleFile(ExecutionContext executionContext) throws Exception {
         DelimiterFileItemWriter<SampleVo> fileItemWriter = createDelimiterFileItemWriterBuilder(SampleVo.class)
-                    .filePath(filePath)
-                    .build();
+                .filePath(filePath)
+                .withHeader(false)
+                .build();
         try {
             fileItemWriter.open(executionContext);
             for (int i = 0; i < size; i++) {
@@ -81,6 +82,7 @@ public class CreateConfigurableSampleFileTasklet extends AbstractTasklet {
     public void createFixedLengthSampleFile(ExecutionContext executionContext) throws Exception {
         FixedLengthFileItemWriter<SampleVo> fileItemWriter = createFixedLengthFileItemWriterBuilder(SampleVo.class)
                 .filePath(filePath)
+                .withHeader(false)
                 .build();
         try {
             fileItemWriter.open(executionContext);

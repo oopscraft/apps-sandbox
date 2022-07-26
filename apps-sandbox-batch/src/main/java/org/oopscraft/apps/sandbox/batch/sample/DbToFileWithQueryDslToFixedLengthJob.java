@@ -24,15 +24,18 @@ public class DbToFileWithQueryDslToFixedLengthJob extends AbstractJob {
 
     private long size;
 
+    private String filePath;
+
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
 
-        String filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
+        // defines
+        filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화
         addStep(ClearAllSampleDbTasklet.builder().build());
@@ -41,7 +44,7 @@ public class DbToFileWithQueryDslToFixedLengthJob extends AbstractJob {
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
         // 2. 데이터 처리
-        addStep(dbToFileStep(filePath));
+        addStep(dbToFileStep());
 
         // 3. 결과 검증
         addStep(CompareFileToSampleDbTasklet.builder()
@@ -51,14 +54,14 @@ public class DbToFileWithQueryDslToFixedLengthJob extends AbstractJob {
     }
 
     /**
-     e    * 데이터 복사
+     * db to file step
      * @return
      */
-    public Step dbToFileStep(String filePath) {
+    public Step dbToFileStep() {
         return stepBuilderFactory.get("dbToFileStep")
                 .<SampleVo, SampleVo>chunk(10)
                 .reader(dbItemReader())
-                .writer(fileItemWriter(filePath))
+                .writer(fileItemWriter())
                 .build();
     }
 
@@ -96,7 +99,7 @@ public class DbToFileWithQueryDslToFixedLengthJob extends AbstractJob {
      *
      * @return
      */
-    public FixedLengthFileItemWriter<SampleVo> fileItemWriter(String filePath) {
+    public FixedLengthFileItemWriter<SampleVo> fileItemWriter() {
         return createFixedLengthFileItemWriterBuilder(SampleVo.class)
                 .name("fileItemWriter")
                 .filePath(filePath)

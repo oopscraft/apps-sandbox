@@ -31,10 +31,12 @@ public class FileToDbWithFixedLengthToJpaJob extends AbstractJob {
     @Override
     public void initialize(BatchContext batchContext) {
 
-        // 0. 패라미터 체크
+        // parameter
         size = Optional.ofNullable(batchContext.getJobParameter("size"))
                 .map(value->Long.parseLong(value))
                 .orElseThrow(()->new RuntimeException("invalid size"));
+
+        // defines
         filePath = BatchConfig.getDataDirectory(this) + String.format("sample_%s.fld", getBatchContext().getBaseDate());
 
         // 0. 초기화
@@ -48,14 +50,14 @@ public class FileToDbWithFixedLengthToJpaJob extends AbstractJob {
                 .build());
 
         // 2. 데이터 처리
-        addStep(fileToDbStep(filePath));
+        addStep(fileToDbStep());
     }
 
     /**
      * file to db step
      * @return
      */
-    public Step fileToDbStep(String filePath) {
+    public Step fileToDbStep() {
         return stepBuilderFactory.get("fileToDbStep")
                 .<SampleVo, SampleBackupEntity>chunk(10)
                 .reader(fileItemReader(filePath))
