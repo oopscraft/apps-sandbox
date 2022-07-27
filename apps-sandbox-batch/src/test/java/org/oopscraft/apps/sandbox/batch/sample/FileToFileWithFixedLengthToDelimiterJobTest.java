@@ -6,12 +6,12 @@ import org.oopscraft.apps.batch.test.AbstractJobTestSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileToFileWithConfigurableToConfigurableJobTest extends AbstractJobTestSupport {
+class FileToFileWithFixedLengthToDelimiterJobTest extends AbstractJobTestSupport {
 
     @Test
     public void testDefault() {
         BatchContext batchContext = BatchContext.builder()
-                .jobClass(FileToFileWithConfigurableToConfigurableJob.class)
+                .jobClass(FileToFileWithFixedLengthToDelimiterJob.class)
                 .baseDate(getCurrentBaseDate())
                 .jobParameter("size", "123")
                 .build();
