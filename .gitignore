@@ -35,3 +35,6 @@ build
 # ignore generated resource
 **/src/main/generated
 **/src/test/generated_tests
+
+# data
+**/dat/
