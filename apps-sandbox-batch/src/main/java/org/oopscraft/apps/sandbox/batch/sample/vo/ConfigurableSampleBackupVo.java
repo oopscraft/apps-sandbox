@@ -14,46 +14,46 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ConfigurableSampleBackupVo {
 
-    @Length(1)
+    @Length(10)
     private String type;
 
-    @Length(32)
+    @Length(40)
     private String id;
 
-    @Length(50)
+    @Length(20)
     private String name;
 
     @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(value = 10, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private long longNumber;
 
-    @Length(value = 10, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private double doubleNumber;
 
-    @Length(value = 10, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private BigDecimal bigDecimal;
 
-    @Length(32)
+    @Length(30)
     private java.sql.Date sqlDate;
 
-    @Length(32)
+    @Length(30)
     private java.util.Date utilDate;
 
-    @Length(32)
+    @Length(30)
     private java.sql.Timestamp timestamp;
 
-    @Length(32)
+    @Length(30)
     private LocalDate localDate;
 
-    @Length(32)
+    @Length(30)
     private LocalDateTime localDateTime;
 
-    @Length(1000)
+    @Length(100)
     private String lobText;
 
-    @Length(1000)
+    @Length(100)
     private String cryptoText;
 
 }

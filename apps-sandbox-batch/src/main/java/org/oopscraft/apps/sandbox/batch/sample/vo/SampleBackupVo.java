@@ -24,13 +24,13 @@ public class SampleBackupVo {
     @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(value=10, align = Align.RIGHT)
+    @Length(value=20, align = Align.RIGHT)
     private long longNumber;
 
-    @Length(value = 10, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private double doubleNumber;
 
-    @Length(value = 10, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private BigDecimal bigDecimal;
 
     @Length(30)
@@ -48,10 +48,10 @@ public class SampleBackupVo {
     @Length(30)
     private LocalDateTime localDateTime;
 
-    @Length(500)
+    @Length(100)
     private String lobText;
 
-    @Length(500)
+    @Length(100)
     private String cryptoText;
 
 }

@@ -16,22 +16,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SampleItemVo {
 
-    @Length(100)
+    @Length(40)
     private String sampleId;
 
-    @Length(100)
+    @Length(40)
     private String id;
 
-    @Length(100)
+    @Length(20)
     private String name;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(100)
+    @Length(30)
     private LocalDate localDate;
 
-    @Length(100)
+    @Length(30)
     private LocalDateTime localDateTime;
 
 }

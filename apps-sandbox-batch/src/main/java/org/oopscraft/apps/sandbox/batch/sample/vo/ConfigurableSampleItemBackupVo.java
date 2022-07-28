@@ -13,25 +13,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ConfigurableSampleItemBackupVo {
 
-    @Length(1)
+    @Length(10)
     private String type;
 
-    @Length(32)
+    @Length(40)
     private String sampleId;
 
-    @Length(32)
+    @Length(40)
     private String id;
 
-    @Length(50)
+    @Length(20)
     private String name;
 
     @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(32)
+    @Length(30)
     private LocalDate localDate;
 
-    @Length(32)
+    @Length(30)
     private LocalDateTime localDateTime;
 
 }

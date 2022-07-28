@@ -14,43 +14,43 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SampleVo {
 
-    @Length(100)
+    @Length(40)
     private String id;
 
-    @Length(100)
+    @Length(20)
     private String name;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 10, align = Align.RIGHT)
     private int number;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private long longNumber;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private double doubleNumber;
 
-    @Length(value = 100, align = Align.RIGHT)
+    @Length(value = 20, align = Align.RIGHT)
     private BigDecimal bigDecimal;
 
-    @Length(100)
+    @Length(30)
     private java.sql.Date sqlDate;
 
-    @Length(100)
+    @Length(30)
     private java.util.Date utilDate;
 
-    @Length(100)
+    @Length(30)
     private java.sql.Timestamp timestamp;
 
-    @Length(100)
+    @Length(30)
     private LocalDate localDate;
 
-    @Length(100)
+    @Length(30)
     private LocalDateTime localDateTime;
 
-    @Length(1024)
+    @Length(100)
     private String lobText;
 
-    @Length(1024)
+    @Length(100)
     private String cryptoText;
 
 }

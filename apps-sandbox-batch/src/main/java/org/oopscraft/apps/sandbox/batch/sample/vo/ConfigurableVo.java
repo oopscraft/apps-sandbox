@@ -9,7 +9,7 @@ import org.oopscraft.apps.batch.item.file.annotation.Length;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ConfigurableVo {
 
-    @Length(1)
+    @Length(10)
     private String type;
 
 }

@@ -16,13 +16,4 @@ class DbToDbWithMybatisToMybatisJobTest extends AbstractJobTestSupport {
         launchJob(batchContext);
     }
 
-    @Test
-    public void testLargeData() {
-        BatchContext batchContext = BatchContext.builder()
-                .jobClass(DbToDbWithMybatisToMybatisJob.class)
-                .baseDate(getCurrentBaseDate())
-                .jobParameter("size", "12345")
-                .build();
-        launchJob(batchContext);
-    }
 }
