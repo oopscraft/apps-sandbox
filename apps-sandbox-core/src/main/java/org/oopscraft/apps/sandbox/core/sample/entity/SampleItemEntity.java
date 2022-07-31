@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "sandbox_sample_item")
+@Table(name = "apps_sandbox_sample_item")
 @IdClass(SampleItemEntity.Pk.class)
 @Data
 @EqualsAndHashCode(callSuper = false)

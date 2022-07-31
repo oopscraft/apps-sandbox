@@ -37,7 +37,7 @@
                 local_date,
                 lob_text,
                 crypto_text
-        from    sandbox_sample
+        from    apps_sandbox_sample
         limit   #{limit}
         ]]>
     </select>

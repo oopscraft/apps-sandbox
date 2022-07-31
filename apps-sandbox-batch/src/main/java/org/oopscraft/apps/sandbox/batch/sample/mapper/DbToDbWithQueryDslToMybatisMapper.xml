@@ -7,7 +7,7 @@
 
     <insert id="insertSampleBackup">
         <![CDATA[
-        insert into sandbox_sample_backup (
+        insert into apps_sandbox_sample_backup (
             id,
             name,
             number,

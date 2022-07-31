@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "sandbox_sample_item_backup")
+@Table(name = "apps_sandbox_sample_item_backup")
 @IdClass(SampleItemBackupEntity.Pk.class)
 @Data
 @EqualsAndHashCode(callSuper = false)

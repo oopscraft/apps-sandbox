@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "sandbox_sample_backup")
+@Table(name = "apps_sandbox_sample_backup")
 @Data
 @EqualsAndHashCode(callSuper=false)
 @SuperBuilder
