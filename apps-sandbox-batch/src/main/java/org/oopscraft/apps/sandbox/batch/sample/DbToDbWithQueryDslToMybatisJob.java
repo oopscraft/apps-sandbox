@@ -29,8 +29,6 @@ public class DbToDbWithQueryDslToMybatisJob extends AbstractJob {
 
     private long size;
 
-    private ModelMapper modelMapper = new ModelMapper();
-
     /**
      * initialize
      * @param batchContext

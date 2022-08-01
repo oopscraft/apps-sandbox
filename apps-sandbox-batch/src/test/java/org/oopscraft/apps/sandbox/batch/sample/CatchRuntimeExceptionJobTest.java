@@ -4,10 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.test.AbstractJobTestSupport;
-import org.oopscraft.apps.sandbox.batch.sample.TransactionManuallyJob;
 
 @Slf4j
-public class TransactionManuallyJobTest extends AbstractJobTestSupport {
+public class CatchRuntimeExceptionJobTest extends AbstractJobTestSupport {
 
     /**
      * test default
@@ -15,7 +14,7 @@ public class TransactionManuallyJobTest extends AbstractJobTestSupport {
     @Test
     public void testDefault() {
         BatchContext batchContext = BatchContext.builder()
-                .jobClass(TransactionManuallyJob.class)
+                .jobClass(CatchRuntimeExceptionJob.class)
                 .baseDate("20210101")
                 .jobParameter("size", "123")
                 .build();

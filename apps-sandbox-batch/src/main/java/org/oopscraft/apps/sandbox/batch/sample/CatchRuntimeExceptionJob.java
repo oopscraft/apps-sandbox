@@ -1,11 +1,10 @@
 package org.oopscraft.apps.sandbox.batch.sample;
 
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.oopscraft.apps.batch.BatchContext;
+import org.oopscraft.apps.batch.dependency.BatchComponentScan;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.core.data.TransactionTemplateUtils;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.ClearAllSampleDbTasklet;
@@ -16,20 +15,17 @@ import org.oopscraft.apps.sandbox.core.sample.SampleService;
 import org.oopscraft.apps.sandbox.core.sample.entity.QSampleEntity;
 import org.oopscraft.apps.sandbox.core.sample.entity.SampleEntity;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.transaction.annotation.Propagation;
-import org.springframework.util.Assert;
 
 import java.util.Optional;
 
 @Slf4j
+@BatchComponentScan
 @RequiredArgsConstructor
-public class TransactionManuallyJob extends AbstractJob {
+public class CatchRuntimeExceptionJob extends AbstractJob {
 
     private long size;
 
@@ -55,8 +51,8 @@ public class TransactionManuallyJob extends AbstractJob {
         // 1. 테스트 데이터 생성
         addStep(CreateSampleDbTasklet.builder().size(size).build());
 
-        // 2. transaction manually step
-        addStep(transactionManuallyStep());
+        // 2. catch runtime exception step
+        addStep(catchRuntimeExceptionStep());
 
         // 3. verifies sample backup data
         addStep(verifyStep());
@@ -64,10 +60,10 @@ public class TransactionManuallyJob extends AbstractJob {
     }
 
     /**
-     * transaction manually
+     * catch runtime exception step
      * @return
      */
-    public Step transactionManuallyStep() {
+    public Step catchRuntimeExceptionStep() {
         return stepBuilderFactory.get("step")
                 .<SampleEntity, SampleEntity>chunk(1)
                 .reader(itemDbReader())

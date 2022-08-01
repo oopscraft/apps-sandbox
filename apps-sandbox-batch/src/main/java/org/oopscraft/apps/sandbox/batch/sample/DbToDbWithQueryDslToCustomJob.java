@@ -36,8 +36,6 @@ public class DbToDbWithQueryDslToCustomJob extends AbstractJob {
 
     private final SampleItemBackupRepository sampleItemBackupRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
-
     /**
      * initialize
      * @param batchContext
