@@ -96,7 +96,7 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
         return items -> {
             for(SampleEntity item : items) {
 
-                // new transaction
+                // (*) new transaction
                 TransactionTemplateUtils.executeWithoutResult(transactionManager, Propagation.REQUIRES_NEW, transactionStatus -> {
                     try {
                         count ++;
@@ -116,7 +116,7 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
                         // checks rollback-only manually (jpa transaction manager not support nested transaction)
                         transactionStatus.setRollbackOnly();
 
-                        // writes error with new transaction
+                        // (*) writes error with new transaction
                         TransactionTemplateUtils.executeWithoutResult(transactionManager, Propagation.REQUIRES_NEW, transactionStatus1->{
                             SampleError sampleError = modelMapper.map(item, SampleError.class);
                             sampleService.saveSampleError(sampleError, false);
