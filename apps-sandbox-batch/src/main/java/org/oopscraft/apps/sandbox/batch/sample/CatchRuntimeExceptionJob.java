@@ -9,11 +9,13 @@ import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.core.data.TransactionTemplateUtils;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.ClearAllSampleDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleDbTasklet;
-import org.oopscraft.apps.sandbox.core.sample.SampleBackup;
-import org.oopscraft.apps.sandbox.core.sample.SampleError;
-import org.oopscraft.apps.sandbox.core.sample.SampleService;
 import org.oopscraft.apps.sandbox.core.sample.entity.QSampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.SampleBackupEntity;
 import org.oopscraft.apps.sandbox.core.sample.entity.SampleEntity;
+import org.oopscraft.apps.sandbox.core.sample.entity.SampleErrorEntity;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleBackupRepository;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleErrorRepository;
+import org.oopscraft.apps.sandbox.core.sample.repository.SampleRepository;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -29,7 +31,11 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
 
     private long size;
 
-    private final SampleService sampleService;
+    private final SampleRepository sampleRepository;
+
+    private final SampleBackupRepository sampleBackupRepository;
+
+    private final SampleErrorRepository sampleErrorRepository;
 
     private long count = 0;
 
@@ -73,7 +79,6 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
 
     /**
      * item db reader
-     * @param limit
      * @return
      */
     public ItemReader<SampleEntity> itemDbReader() {
@@ -101,14 +106,16 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
                     try {
                         count ++;
                         log.debug("sampleEntity: {}", item);
-                        SampleBackup sampleBackup = SampleBackup.builder()
+                        SampleBackupEntity sampleBackupEntity = SampleBackupEntity.builder()
                                 .id(item.getId())
                                .build();
-                        modelMapper.map(item, sampleBackup);
+                        modelMapper.map(item, sampleBackupEntity);
 
                         // force to error
-                        boolean forceToException = (count%2 == 0 ? true : false);
-                        sampleService.saveSampleBackup(sampleBackup, forceToException);
+                        if(count%2 == 0) {
+                            sampleBackupEntity.setId(null); // force to error
+                        }
+                        sampleBackupRepository.saveAndFlush(sampleBackupEntity);
 
                     }catch(Exception ignore){
                         log.warn(ignore.getMessage());
@@ -118,8 +125,8 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
 
                         // (*) writes error with new transaction
                         TransactionTemplateUtils.executeWithoutResult(transactionManager, Propagation.REQUIRES_NEW, transactionStatus1->{
-                            SampleError sampleError = modelMapper.map(item, SampleError.class);
-                            sampleService.saveSampleError(sampleError, false);
+                            SampleErrorEntity sampleErrorEntity = modelMapper.map(item, SampleErrorEntity.class);
+                            sampleErrorRepository.saveAndFlush(sampleErrorEntity);
                         });
                     }
                });
@@ -136,9 +143,9 @@ public class CatchRuntimeExceptionJob extends AbstractJob {
                 .tasklet((contribution, chunkContext) -> {
 
                     // gets row count
-                    long sampleTotalCount = sampleService.getSampleTotalCount();
-                    long sampleBackupTotalCount = sampleService.getSampleBackupTotalCount();
-                    long sampleErrorTotalCount = sampleService.getSampleErrorTotalCount();
+                    long sampleTotalCount = sampleRepository.count();
+                    long sampleBackupTotalCount = sampleBackupRepository.count();
+                    long sampleErrorTotalCount = sampleErrorRepository.count();
                     log.info("================================================");
                     log.info("| sampleTotalCount:{}", sampleTotalCount);
                     log.info("| sampleBackupTotalCount:{}", sampleBackupTotalCount);
