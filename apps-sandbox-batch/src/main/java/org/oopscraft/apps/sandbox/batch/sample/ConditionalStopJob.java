@@ -30,7 +30,7 @@ public class ConditionalStopJob extends AbstractJob {
         return stepBuilderFactory.get("checkStep")
                 .tasklet((contribution, chunkContext) -> {
 
-                    // force to be terminitated
+                    // force to be terminated
                     if(1 == 1) {
                         contribution.getStepExecution().setTerminateOnly();
                     }
