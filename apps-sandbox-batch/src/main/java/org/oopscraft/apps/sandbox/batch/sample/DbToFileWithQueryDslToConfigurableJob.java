@@ -9,7 +9,7 @@ import org.oopscraft.apps.batch.BatchConfig;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.dependency.BatchComponentScan;
 import org.oopscraft.apps.batch.item.db.QueryDslDbItemReader;
-import org.oopscraft.apps.batch.item.file.DelimiterFileItemWriterConfigurable;
+import org.oopscraft.apps.batch.item.file.DelimiterFileItemWriter;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.ClearAllSampleDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateSampleDbTasklet;
@@ -102,12 +102,10 @@ public class DbToFileWithQueryDslToConfigurableJob extends AbstractJob {
      * db writer
      * @return
      */
-    public DelimiterFileItemWriterConfigurable<SampleVo> fileItemWriter() {
-        DelimiterFileItemWriterConfigurable<SampleVo> fileWriter = new DelimiterFileItemWriterConfigurable<>() {
-
+    public DelimiterFileItemWriter<SampleVo> fileItemWriter() {
+        DelimiterFileItemWriter<SampleVo> fileWriter = new DelimiterFileItemWriter.Configurable<>() {
             @Override
             public void internalWrite(List<? extends SampleVo> items) throws Exception {
-                ModelMapper modelMapper = new ModelMapper();
                 for(SampleVo sampleVo : items) {
 
                     // writes sample

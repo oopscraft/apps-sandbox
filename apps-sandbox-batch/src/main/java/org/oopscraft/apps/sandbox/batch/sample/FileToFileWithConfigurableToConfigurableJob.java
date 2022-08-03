@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.oopscraft.apps.batch.BatchConfig;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.dependency.BatchComponentScan;
-import org.oopscraft.apps.batch.item.file.FixedLengthFileItemReaderConfigurable;
-import org.oopscraft.apps.batch.item.file.FixedLengthFileItemWriterConfigurable;
+import org.oopscraft.apps.batch.item.file.FixedLengthFileItemReader;
+import org.oopscraft.apps.batch.item.file.FixedLengthFileItemWriter;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.ClearAllSampleDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateConfigurableSampleFileTasklet;
@@ -87,8 +87,8 @@ public class FileToFileWithConfigurableToConfigurableJob extends AbstractJob {
      * file item reader
      * @return
      */
-    public FixedLengthFileItemReaderConfigurable<Object> fileItemReader() {
-        FixedLengthFileItemReaderConfigurable<Object> fileItemReader = new FixedLengthFileItemReaderConfigurable<>() {
+    public FixedLengthFileItemReader<Object> fileItemReader() {
+        FixedLengthFileItemReader<Object> fileItemReader = new FixedLengthFileItemReader.Configurable<>() {
             @Override
             public Object internalRead(String line, int lineNumber) {
                 ConfigurableVo item = (ConfigurableVo)mapLine(line, ConfigurableVo.class);
@@ -118,8 +118,8 @@ public class FileToFileWithConfigurableToConfigurableJob extends AbstractJob {
      * file item writer
      * @return
      */
-    public FixedLengthFileItemWriterConfigurable<Object> fileItemWriter() {
-        FixedLengthFileItemWriterConfigurable<Object> fileWriter = new FixedLengthFileItemWriterConfigurable<>() {
+    public FixedLengthFileItemWriter<Object> fileItemWriter() {
+        FixedLengthFileItemWriter<Object> fileWriter = new FixedLengthFileItemWriter.Configurable<>() {
             @Override
             public void internalWrite(List<? extends Object> items) throws Exception {
                 for(Object item : items) {

@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.oopscraft.apps.batch.BatchConfig;
 import org.oopscraft.apps.batch.BatchContext;
 import org.oopscraft.apps.batch.dependency.BatchComponentScan;
-import org.oopscraft.apps.batch.item.file.FixedLengthFileItemReaderConfigurable;
+import org.oopscraft.apps.batch.item.file.FixedLengthFileItemReader;
 import org.oopscraft.apps.batch.job.AbstractJob;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.ClearAllSampleDbTasklet;
 import org.oopscraft.apps.sandbox.batch.sample.tasklet.CreateConfigurableSampleFileTasklet;
@@ -93,11 +93,11 @@ public class FileToDbWithConfigurableToCustomJob extends AbstractJob {
      * file reader
      * @return
      */
-    public FixedLengthFileItemReaderConfigurable<Object> fileItemReader(String filePath) {
-        FixedLengthFileItemReaderConfigurable<Object> fileItemReader = new FixedLengthFileItemReaderConfigurable<>() {
+    public FixedLengthFileItemReader<Object> fileItemReader(String filePath) {
+        FixedLengthFileItemReader<Object> fileItemReader = new FixedLengthFileItemReader.Configurable<>() {
             @Override
             public Object internalRead(String line, int lineNumber) {
-                ConfigurableVo item = (ConfigurableVo)mapLine(line, ConfigurableVo.class);
+                ConfigurableVo item = (ConfigurableVo) mapLine(line, ConfigurableVo.class);
                 String type = item.getType();
 
                 // type A
